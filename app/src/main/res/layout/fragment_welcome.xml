@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical" style="@style/Layout.FullWidthHeight"
+        android:layout_marginLeft="@dimen/padding_medium"
+        android:layout_marginRight="@dimen/padding_medium"
+       >
+        <ImageView
+
+            style="@style/Layout.FullWidthHeight"
+            android:layout_above="@+id/btnRegister">
+
+        </ImageView>
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnRegisterText"
+            android:textAllCaps="false"
+            android:layout_above="@+id/btnHaveAccount"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:background="@color/colorAccent"
+            android:textColor="@color/cmn_white"
+            />
+
+        <Button
+            android:id="@+id/btnHaveAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnHaveAccountText"
+            android:background="@drawable/button_bg"
+            android:textColor="@color/cmn_white"
+            android:textAllCaps="false"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginBottom="@dimen/padding_medium"
+            />
+    </RelativeLayout>

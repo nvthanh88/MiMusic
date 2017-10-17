@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" style="@style/Layout.FullWidthHeight"
+    android:background="@color/colorPrimaryDark"
+    >
+    <EditText
+        android:layout_marginTop="@dimen/padding_huger"
+        android:id="@+id/editRegEmail"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/textHeight"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/edtEmailHint"
+        android:textSize="@dimen/text_normal"
+        android:textColor="@color/cmn_gray"
+        android:inputType="textEmailAddress" />
+    <EditText
+        android:id="@+id/editRegPassword"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/textHeight"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/edtPasswordHint"
+        android:textSize="@dimen/text_normal"
+        android:textColor="@color/cmn_gray"
+        android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/edtConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/textHeight"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/edtConfirmPasswordText"
+        android:textSize="@dimen/text_normal"
+        android:textColor="@color/cmn_gray"
+        android:inputType="textPassword" />
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:textColor="@color/cmn_white"
+        android:background="@color/colorAccent"
+        android:text="@string/btnCreateAccountText"
+        android:layout_marginTop="@dimen/padding_huge"/>
+
+</LinearLayout>

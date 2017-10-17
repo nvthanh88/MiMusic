@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TEXT SIZE -->
+    <dimen name="text_smallest">9sp</dimen>
+    <dimen name="text_event_smaller">8sp</dimen>
+    <dimen name="text_tab">10sp</dimen>
+    <dimen name="text_smaller">11sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_normal">14sp</dimen>
+    <dimen name="text_title">16sp</dimen>
+    <dimen name="text_medium">18sp</dimen>
+    <dimen name="text_header">20sp</dimen>
+    <dimen name="text_large">22sp</dimen>
+    <dimen name="text_larger">25sp</dimen>
+    <dimen name="text_huge">28sp</dimen>
+    <dimen name="text_extra">38sp</dimen>
+    <dimen name="text_xxxl">50sp</dimen>
+
+    <!-- BUTTON SIZE -->
+    <dimen name="btn_height">45dp</dimen>
+    <dimen name="btn_height_medium">40dp</dimen>
+    <dimen name="btn_height_small">35dp</dimen>
+    <dimen name="btn_height_smaller">30dp</dimen>
+    <dimen name="btn_height_smallest">20dp</dimen>
+    <dimen name="btn_height_bigger">50dp</dimen>
+    <dimen name="btn_height_trade">25dp</dimen>
+
+    <!-- PADDING -->
+    <dimen name="padding_min">1px</dimen>
+    <dimen name="padding_smaller">3dp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="padding_small_bigger">7dp</dimen>
+    <dimen name="padding_normal">10dp</dimen>
+    <dimen name="padding_normal_bigger">11dp</dimen>
+    <dimen name="padding_medium">15dp</dimen>
+    <dimen name="padding_big">20dp</dimen>
+    <dimen name="padding_bigger">25dp</dimen>
+    <dimen name="padding_huge">30dp</dimen>
+    <dimen name="padding_huger">72dp</dimen>
+    <!--Image-->
+    <dimen name="album_cover">160dp</dimen>
+
+    <!-- TOOL BAR -->
+    <dimen name="toolbar_height">45dp</dimen>
+    <dimen name="item_menu_height">60dp</dimen>
+
+
+    <!-- SPINNER -->
+    <dimen name="spinner_height">60dp</dimen>
+
+    <!-- ICON -->
+    <dimen name="icon_width_height">40dp</dimen>
+    <dimen name="icon_text">22dp</dimen>
+    <dimen name="icon_star">25dp</dimen>
+    <dimen name="timestamp">12dp</dimen>
+    <dimen name="textHeight">50dp</dimen>
+
+    <!-- OTHER -->
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Layout.FullWidth"
+    android:layout_height="@dimen/toolbar_height"
+    android:orientation="horizontal"
+    android:animateLayoutChanges="true"
+    android:weightSum="5"
+    android:background="@color/colorPrimaryDark"
+    android:layout_alignParentBottom="true"
+    tools:context="com.nvt.mimusic.view.activity.MiMainActivity"
+
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:id="@+id/ToolbarSearchTab"
+        style="@style/Layout.FullWidthHeight.Center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:text="Home"
+            android:textColor="@color/cmn_white"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+                   />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ToolbarMailTab"
+        style="@style/Layout.FullWidthHeight"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/cmn_white"
+            style="@style/Layout.WrapWidthHeight"
+            android:text="@string/ToolbarBottomTabGenericsString"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ToolbarLoginTab"
+        style="@style/Layout.FullWidthHeight.Center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/cmn_white"
+
+            style="@style/Layout.WrapWidthHeight"
+            android:text="@string/ToolbarBottomTabPlayString"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ToolbarChatTab"
+        style="@style/Layout.FullWidthHeight.Center"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+    <LinearLayout
+
+        android:id="@+id/ToolbarMenuTab"
+        style="@style/Layout.FullWidthHeight.Center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/cmn_white"
+
+            style="@style/Layout.WrapWidthHeight"
+            android:text="@string/ToolbarBottomTabMenuString"/>
+    </LinearLayout>
+</LinearLayout>

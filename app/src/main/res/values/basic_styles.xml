@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- LAYOUT -->
+    <style name="Layout">
+    </style>
+    <style name="Layout.FullWidthHeight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="Layout.FullWidth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="Layout.FullHeight">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="Layout.WrapWidthHeight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="Layout.FullWidthHeight.Center" parent="Layout.FullWidthHeight">
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Layout.FullWidth.Center" parent="Layout.FullWidth">
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="Layout.FullHeight.Center" parent="Layout.FullHeight">
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+
+    <!--Button-->
+
+
+
+</resources>
