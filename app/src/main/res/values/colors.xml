@@ -36,6 +36,7 @@
     <color name="cmn_seek_bar_thumbnail_border">#999</color>
     <color name="cmn_bg_tutorial">#6C6C6C</color>
     <color name="cmn_bg_dot">#535353</color>
+    <color name="cmn_accent">#F02A71</color>
 
     <color name="colorPrimary">#8884B7</color>
     <color name="colorPrimaryDark">#14103B</color>

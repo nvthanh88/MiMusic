@@ -21,5 +21,10 @@
     <!--Album-->
     <string name="add_to_favourite">Add to Favourite</string>
     <string name="add_to_play_next">Add to Play Next</string>
+    <string name="txtRecycleLoadMoreString">See more</string>
+    <string name="txtRecycleAlbumText">Album list</string>
+    <string name="txtRecycleSongText">Song list</string>
+    <string name="txtSongTileText">Song Tile</string>
+    <string name="txtArtist">Artist</string>
 
 </resources>

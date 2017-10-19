@@ -54,6 +54,7 @@
     <dimen name="icon_star">25dp</dimen>
     <dimen name="timestamp">12dp</dimen>
     <dimen name="textHeight">50dp</dimen>
-
+    <!--Card View -->
+    <dimen name="card_view_height">60dp</dimen>
     <!-- OTHER -->
 </resources>

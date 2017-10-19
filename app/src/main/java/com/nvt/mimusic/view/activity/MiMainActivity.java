@@ -1,41 +1,39 @@
 package com.nvt.mimusic.view.activity;
 
-import android.app.Fragment;
+import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.res.Resources;
+
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.adapter.AlbumAdapter;
+
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
-import com.nvt.mimusic.helper.GridSpacingItemDecoration;
+
 import com.nvt.mimusic.helper.SessionManager;
 import com.nvt.mimusic.model.AlbumModel;
-import com.nvt.mimusic.view.authen.fragment.WelcomeFragment;
-import com.nvt.mimusic.view.home.HomeFragment;
 
-import java.util.ArrayList;
+import com.nvt.mimusic.view.home.AlbumFragment;
+import com.nvt.mimusic.view.home.SongFragment;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MiMainActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 001;
     @BindView(R.id.toolbarTop)
     Toolbar toolbarTop;
 
@@ -54,22 +52,40 @@ public class MiMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbarTop);
-        openScreen(ScreenIDs.ID.HOME, HomeFragment.class,null,false);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
 
-}
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE))
+            {
 
-    public void openScreen(final ScreenIDs.ID tab, final Class<? extends MiBaseFragment> fragmentClass, final Bundle bundles, final boolean addToBackStack) {
+
+            } else
+            {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+        }
+        openScreen(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
+        openScreen(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
+
+    }
+
+    public void openScreen(final ScreenIDs.ID tab, final Class<? extends MiBaseFragment> fragmentClass, final int frameID, final Bundle bundles, final boolean addToBackStack) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                openScreenBackgroundTask(tab, fragmentClass, bundles, addToBackStack);
+                openScreenBackgroundTask(tab, fragmentClass,frameID, bundles, addToBackStack);
             }
 
 
         });
 
     }
-    private void openScreenBackgroundTask(ScreenIDs.ID tab, final Class<? extends MiBaseFragment> fragmentClass, Bundle bundles, boolean addToBackStack) {
+    private void openScreenBackgroundTask(ScreenIDs.ID tab, final Class<? extends MiBaseFragment> fragmentClass,int frameID, Bundle bundles, boolean addToBackStack) {
 
         if (getBaseContext() == null) return;
         mCurrentTab = tab;
@@ -86,7 +102,7 @@ public class MiMainActivity extends AppCompatActivity {
                 fragmentTransaction.addToBackStack(tag);
                 Log.e(TAG, "openScreen: add " + tag + " to back stack");
             }
-            fragmentTransaction.replace(R.id.frameContent, mCurrentFragment, tag);
+            fragmentTransaction.replace(frameID, mCurrentFragment, tag);
             fragmentTransaction.commitAllowingStateLoss();
             fragmentManager.executePendingTransactions();
         } catch (Exception e) {
@@ -103,8 +119,21 @@ public class MiMainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openScreen(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
+                    openScreen(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
 
+                } else {
+                }
+                return;
+            }
 
-
-
+        }
+    }
 }
