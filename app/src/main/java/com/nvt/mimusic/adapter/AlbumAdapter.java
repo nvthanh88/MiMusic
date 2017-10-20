@@ -2,6 +2,8 @@ package com.nvt.mimusic.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +21,8 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nvt.mimusic.core.MiCoreApplication;
 
 import com.nvt.mimusic.model.AlbumModel;
+
+import java.io.IOException;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,37 +84,21 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
 
         holder.imgOptions.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                showPopUpMenu(holder.imgOptions);
-                Toast.makeText(mAppContext,"Onclick :" + albumModelItem.getName(),Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                try {
+                    mediaPlayer.setDataSource(mAppContext, MiCoreApplication.getAlbumUri(albumModelItem.getAlbumId()));
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mediaPlayer.start();
+
             }
         });
-    }
-    private void showPopUpMenu(View view){
-        PopupMenu popup = new PopupMenu(mAppContext,view);
-        popup.getMenuInflater().inflate(R.menu.menu_album, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-        popup.show();
-    }
-
-
-
-    private class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-        private MyMenuItemClickListener() {
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch(item.getItemId()){
-                case R.id.action_add_favourite:
-                    Toast.makeText(mAppContext,"Add to Favourite",Toast.LENGTH_LONG).show();
-                    break;
-                case R.id.action_play_next:
-                    Toast.makeText(mAppContext,"Add to play next",Toast.LENGTH_LONG).show();
-            }
-
-            return false;
-        }
     }
 
 
@@ -134,6 +122,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
          ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
+
         }
     }
 

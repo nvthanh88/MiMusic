@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    style="@style/Layout.FullWidthHeight"
+    android:scaleType="centerCrop">
+    <RelativeLayout
+        android:id="@+id/frameContent1"
+        android:layout_width="match_parent"
+        android:layout_height="405dp"
+        android:scaleType="centerCrop">
+        <ImageView
+            android:id="@+id/nowPlayingBackground"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+        <android.support.percent.PercentRelativeLayout
+            android:scaleType="centerCrop"
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="378dp"
+            android:background="@color/cmn_white"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
+
+            <FrameLayout
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                app:layout_heightPercent="50%"
+                app:layout_widthPercent="50%"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+                <com.nvt.mimusic.wiget.CircleImageView
+                    android:id="@+id/albumCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerCrop" />
+
+                <com.nvt.mimusic.wiget.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                     />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="@dimen/padding_huge"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/playFloatingBtn"
+                    android:layout_width="@dimen/btn_height"
+                    android:layout_height="@dimen/btn_height"
+                    android:clickable="true"
+                    android:scaleType="fitCenter"
+                    android:tag="bg_tint_accent_color" />
+
+            </LinearLayout>
+            <com.nvt.mimusic.wiget.CircularSeekBar
+                android:id="@+id/song_progress_circular"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:maxHeight="1dp"
+                android:progress="30"
+                app:circle_color="#33000000"
+                app:circle_progress_color="?attr/accentColor"
+                app:circle_stroke_width="2"
+                app:layout_heightPercent="60%"
+                app:layout_widthPercent="60%"
+                app:pointer_color="?attr/accentColor"
+                app:pointer_halo_border_width="1.5"
+                app:pointer_halo_color="?attr/accentColor"
+                app:pointer_halo_width="0.5" />
+
+        </android.support.percent.PercentRelativeLayout>
+
+
+        <TextView
+            android:id="@+id/txtUpNext"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:text="Up next: "
+            android:gravity="center"
+            android:background="@drawable/upnext_text_bg"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_small"/>
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:background="@color/cmn_white"
+        android:id="@+id/recycleViewNowPlayingPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

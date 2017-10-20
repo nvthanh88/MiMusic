@@ -9,6 +9,14 @@ import android.net.Uri;
  */
 
 public class MiCoreApplication extends Application {
+    public static MiCoreApplication mInstance;
+    public static final MiCoreApplication getInstance(){
+        if (mInstance == null)
+        {
+            mInstance = new MiCoreApplication();
+        }
+        return mInstance;
+    }
     public static Uri getAlbumUri(long albumId)
     {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);

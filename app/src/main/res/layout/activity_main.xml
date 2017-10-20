@@ -16,38 +16,44 @@
         android:id="@+id/toolbarBottom"
         layout="@layout/bottom_toolbar">
     </include>
-    <ScrollView
-        android:layout_below="@id/toolbarTop"
-        android:layout_above="@id/toolbarBottom"
-        android:orientation="vertical"
+    <FrameLayout
+        android:id="@+id/frameContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-           >
-                <FrameLayout
-                    android:id="@+id/frameAlbumContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                </FrameLayout>
-                <FrameLayout
-                    android:id="@+id/frameSongContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbarTop"
+        android:layout_above="@id/toolbarBottom">
+        <ScrollView
 
-                </FrameLayout>
-                <FrameLayout
-                    android:id="@+id/framePlaylistContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                </FrameLayout>
-        </LinearLayout>
-    </ScrollView>
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+               >
+                    <FrameLayout
+                        android:id="@+id/frameAlbumContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                    </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/frameSongContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                    </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/framePlaylistContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                    </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
 </RelativeLayout>

@@ -41,7 +41,7 @@
     <color name="colorPrimary">#8884B7</color>
     <color name="colorPrimaryDark">#14103B</color>
     <color name="colorAccent">#F02A71</color>
-
+    <color name="cmn_pink">#ffa4c5</color>
 
     <!--Tab  -->
     <color name="tabInActive">@color/cmn_white</color>

@@ -2,6 +2,8 @@ package com.nvt.mimusic.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MiCoreApplication;
 import com.nvt.mimusic.model.SongModel;
+import com.nvt.mimusic.wiget.CircleImageView;
 
 import java.util.List;
 
@@ -87,10 +90,11 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         @BindView(R.id.txtArtistName)
         TextView txtArtistName;
         @BindView(R.id.imgSongThumbnail)
-        ImageView imgSongThumbnail;
+        CircleImageView imgSongThumbnail;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
         }
     }
 }

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     style="@style/Layout.FullWidthHeight"
     android:background="@color/cmn_white"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:paddingTop="@dimen/padding_normal">
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +19,8 @@
         android:textSize="@dimen/text_normal"
         android:layout_alignParentRight="true"
         android:text="@string/txtRecycleLoadMoreString"
-        android:textColor="@color/cmn_accent"/>
+        android:textColor="@color/cmn_pink"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/txtRecycleLoadMoreSong"
         android:id="@+id/songRecycleView"
