@@ -42,7 +42,6 @@ public class MiMainActivity extends AppCompatActivity {
     private MiBaseFragment mCurrentFragment;
     private FragmentManager mFragmentManager;
     private long mLastClickTime = 0;
-    private SessionManager mSessionManager;
     private List<AlbumModel> albumModelList ;
     private AlbumAdapter mAlbumAdapter;
 

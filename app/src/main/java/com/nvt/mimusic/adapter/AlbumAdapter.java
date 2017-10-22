@@ -85,13 +85,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         holder.imgOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                     MediaPlayer mediaPlayer = new MediaPlayer();
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
                 try {
                     mediaPlayer.setDataSource(mAppContext, MiCoreApplication.getAlbumUri(albumModelItem.getAlbumId()));
-                    mediaPlayer.prepare();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
