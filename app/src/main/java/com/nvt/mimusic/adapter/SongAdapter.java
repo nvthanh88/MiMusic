@@ -1,9 +1,13 @@
 package com.nvt.mimusic.adapter;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.RemoteException;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +22,11 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MiCoreApplication;
+import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.model.SongModel;
 import com.nvt.mimusic.wiget.CircleImageView;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,10 +39,22 @@ import butterknife.ButterKnife;
 public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     List<SongModel> songModelList ;
     Context mAppContext;
+    private long albumID;
+    private long[] songIDs;
 
-    public SongAdapter(List<SongModel> songModelList, Context mAppContext) {
+    public SongAdapter(List<SongModel> songModelList, Context mAppContext, long albumID) {
         this.songModelList = songModelList;
         this.mAppContext = mAppContext;
+        this.albumID = albumID;
+        this.songIDs = getSongIds();
+    }
+    public long[] getSongIds() {
+        long[] ret = new long[getItemCount()];
+        for (int i = 0; i < getItemCount(); i++) {
+            ret[i] = songModelList.get(i).getSongId();
+        }
+
+        return ret;
     }
 
     @Override
@@ -76,6 +94,14 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
                         super.onLoadingCancelled(imageUri, view);
                     }
                 });
+        holder.songImgOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+
+        });
 
     }
 
@@ -91,9 +117,26 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         TextView txtArtistName;
         @BindView(R.id.imgSongThumbnail)
         CircleImageView imgSongThumbnail;
+        @BindView(R.id.songImgOptions)
+        ImageView songImgOptions;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                                MusicPlayer.playAll(mAppContext, songIDs, getAdapterPosition(), 0, MiCoreApplication.IdType.Album, false);
+                        }
+                    }, 100);
+
+                }
+            });
 
         }
     }

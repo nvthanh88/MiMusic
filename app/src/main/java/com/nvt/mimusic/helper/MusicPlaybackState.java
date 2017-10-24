@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nvt.mimusic.core.MiCoreApplication;
 import com.nvt.mimusic.database.MusicDatabase;
 
 import java.util.ArrayList;
@@ -72,6 +73,57 @@ public class MusicPlaybackState {
         db.execSQL("DROP TABLE IF EXISTS " + PlaybackQueueColumns.NAME);
         db.execSQL("DROP TABLE IF EXISTS " + PlaybackHistoryColumns.NAME);
         onCreate(db);
+    }
+    public ArrayList<MusicPlaybackTrack> getQueue() {
+        ArrayList<MusicPlaybackTrack> results = new ArrayList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = mMusicDatabase.getReadableDatabase().query(PlaybackQueueColumns.NAME, null,
+                    null, null, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                results.ensureCapacity(cursor.getCount());
+
+                do {
+                    results.add(new MusicPlaybackTrack(cursor.getLong(0), cursor.getLong(1),
+                            MiCoreApplication.IdType.getTypeById(cursor.getInt(2)), cursor.getInt(3)));
+                } while (cursor.moveToNext());
+            }
+
+            return results;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        }
+    }
+
+    public LinkedList<Integer> getHistory(final int playlistSize) {
+        LinkedList<Integer> results = new LinkedList<>();
+
+        Cursor cursor = null;
+        try {
+            cursor = mMusicDatabase.getReadableDatabase().query(PlaybackHistoryColumns.NAME, null,
+                    null, null, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int pos = cursor.getInt(0);
+                    if (pos >= 0 && pos < playlistSize) {
+                        results.add(pos);
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            return results;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        }
     }
 
 

@@ -27,6 +27,7 @@ import butterknife.BindView;
  */
 
 public class SongFragment  extends MiBaseFragment{
+    long albumID = -1;
     private List<SongModel> songModelList;
     private SongAdapter mSongAdapter;
     @BindView(R.id.songRecycleView)
@@ -50,7 +51,7 @@ public class SongFragment  extends MiBaseFragment{
     protected void initControls() {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mAppContext,1);
         songModelList = new ArrayList<>();
-        mSongAdapter = new SongAdapter(SongDataLoader.getAllSongs(mAppContext),mAppContext);
+        mSongAdapter = new SongAdapter(SongDataLoader.getAllSongs(mAppContext),mAppContext,albumID);
         songRecycleView.setLayoutManager(layoutManager);
         songRecycleView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10 ), true));
         songRecycleView.setItemAnimator(new DefaultItemAnimator());

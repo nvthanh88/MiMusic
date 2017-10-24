@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_normal"
+        android:textSize="@dimen/text_large"
         android:text="@string/txtRecycleAlbumText"
         android:layout_alignParentLeft="true"
         android:textStyle="bold"/>
@@ -20,7 +20,7 @@
         android:textSize="@dimen/text_normal"
         android:layout_alignParentRight="true"
         android:text="@string/txtRecycleLoadMoreString"
-        android:textColor="@color/cmn_red"/>
+        android:textColor="@color/colorAccent"/>
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/txtRecycleLoadMoreAlbum"
         android:id="@+id/albumRecycleView"
