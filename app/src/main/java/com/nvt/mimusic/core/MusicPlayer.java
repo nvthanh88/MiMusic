@@ -103,7 +103,7 @@ public class MusicPlayer {
 
     }
 
-    public static void asyncNext(final Context context) {
+    /*public static void asyncNext(final Context context) {
         final Intent previous = new Intent(context, MusicService.class);
         previous.setAction(MusicService.NEXT_ACTION);
         context.startService(previous);
@@ -176,7 +176,7 @@ public class MusicPlayer {
             }
         } catch (final RemoteException ignored) {
         }
-    }
+    }*/
 
     public static final boolean isPlaying() {
         if (mService != null) {
@@ -449,7 +449,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void playArtist(final Context context, final long artistId, int position, boolean shuffle) {
+    /*public static void playArtist(final Context context, final long artistId, int position, boolean shuffle) {
         final long[] artistList = getSongListForArtist(context, artistId);
         if (artistList != null) {
             playAll(context, artistList, position, artistId, IdType.Artist, shuffle);
@@ -461,7 +461,7 @@ public class MusicPlayer {
         if (albumList != null) {
             playAll(context, albumList, position, albumId, IdType.Album, shuffle);
         }
-    }
+    }*/
 
     public static void playAll(final Context context, final long[] list, int position,
                                final long sourceId, final IdType sourceType,
@@ -494,7 +494,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void playNext(Context context, final long[] list, final long sourceId, final IdType sourceType) {
+    /*public static void playNext(Context context, final long[] list, final long sourceId, final IdType sourceType) {
         if (mService == null) {
             return;
         }
@@ -531,9 +531,9 @@ public class MusicPlayer {
             cursor = null;
         } catch (final RemoteException ignored) {
         }
-    }
+    }*/
 
-    public static final long[] getSongListForArtist(final Context context, final long id) {
+    /*public static final long[] getSongListForArtist(final Context context, final long id) {
         final String[] projection = new String[]{
                 BaseColumns._ID
         };
@@ -549,9 +549,9 @@ public class MusicPlayer {
             return mList;
         }
         return sEmptyList;
-    }
+    }*/
 
-    public static final long[] getSongListForAlbum(final Context context, final long id) {
+    /*public static final long[] getSongListForAlbum(final Context context, final long id) {
         final String[] projection = new String[]{
                 BaseColumns._ID
         };
@@ -567,7 +567,7 @@ public class MusicPlayer {
             return mList;
         }
         return sEmptyList;
-    }
+    }*/
 
     public static final int getSongCountForAlbumInt(final Context context, final long id) {
         int songCount = 0;
@@ -665,7 +665,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void addToQueue(final Context context, final long[] list, long sourceId,
+    /*public static void addToQueue(final Context context, final long[] list, long sourceId,
                                   IdType sourceType) {
         if (mService == null) {
             return;
@@ -677,13 +677,13 @@ public class MusicPlayer {
         } catch (final RemoteException ignored) {
         }
     }
-
+*/
     public static final String makeLabel(final Context context, final int pluralInt,
                                          final int number) {
         return context.getResources().getQuantityString(pluralInt, number, number);
     }
 
-    public static void addToPlaylist(final Context context, final long[] ids, final long playlistid) {
+    /*public static void addToPlaylist(final Context context, final long[] ids, final long playlistid) {
         final int size = ids.length;
         final ContentResolver resolver = context.getContentResolver();
         final String[] projection = new String[]{
@@ -714,7 +714,7 @@ public class MusicPlayer {
         final String message = context.getResources().getQuantityString(
                 R.plurals.NNNtrackstoplaylist, numinserted, numinserted);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     public static void makeInsertItems(final long[] ids, final int offset, int len, final int base) {
         if (offset + len > ids.length) {
