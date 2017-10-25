@@ -4,7 +4,11 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,12 +19,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.nvt.mimusic.MiCoreService;
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.adapter.AlbumAdapter;
 
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
 
+import com.nvt.mimusic.core.MusicCorePlayer;
 import com.nvt.mimusic.helper.SessionManager;
 import com.nvt.mimusic.model.AlbumModel;
 
@@ -31,8 +37,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import static com.nvt.mimusic.core.MusicCorePlayer.mMiCoreService;
 
-public class MiMainActivity extends AppCompatActivity {
+public class MiMainActivity extends AppCompatActivity implements ServiceConnection{
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 001;
     @BindView(R.id.toolbarTop)
     Toolbar toolbarTop;
@@ -44,6 +51,9 @@ public class MiMainActivity extends AppCompatActivity {
     private long mLastClickTime = 0;
     private List<AlbumModel> albumModelList ;
     private AlbumAdapter mAlbumAdapter;
+    private MusicCorePlayer.ServiceToken mToken;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,10 @@ public class MiMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbarTop);
+
+
+        //make volume keys change multimedia volume even if music is not playing now
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -68,8 +82,7 @@ public class MiMainActivity extends AppCompatActivity {
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             }
         }
-        openScreen(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
-        openScreen(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
+
 
     }
 
@@ -125,6 +138,7 @@ public class MiMainActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mToken = MusicCorePlayer.bindToService(this, this);
                     openScreen(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
                     openScreen(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
 
@@ -134,5 +148,17 @@ public class MiMainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mMiCoreService = MiCoreService.Stub.asInterface(service);
+
+
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
     }
 }

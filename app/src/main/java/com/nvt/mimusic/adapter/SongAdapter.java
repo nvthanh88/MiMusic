@@ -22,7 +22,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MiCoreApplication;
-import com.nvt.mimusic.core.MusicPlayer;
+import com.nvt.mimusic.core.MusicCorePlayer;
 import com.nvt.mimusic.model.SongModel;
 import com.nvt.mimusic.wiget.CircleImageView;
 
@@ -65,8 +65,8 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        SongModel songModelItem = songModelList.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final SongModel songModelItem = songModelList.get(position);
         holder.txtSongTile.setText(songModelItem.getName());
         holder.txtArtistName.setText(songModelItem.getArtistName());
 
@@ -97,6 +97,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         holder.songImgOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
 
             }
@@ -131,7 +132,8 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
 
                         @Override
                         public void run() {
-                                MusicPlayer.playAll(mAppContext, songIDs, getAdapterPosition(), 0, MiCoreApplication.IdType.Album, false);
+
+                            MusicCorePlayer.playAll(mAppContext, songIDs, getAdapterPosition(), albumID, MiCoreApplication.IdType.Album, false);
                         }
                     }, 100);
 

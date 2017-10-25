@@ -19,7 +19,7 @@ package com.nvt.mimusic.helper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.nvt.mimusic.core.MiCoreApplication;
+import com.nvt.mimusic.core.MiCoreApplication.IdType;
 
 /**
  * This is used by the music playback service to track the music tracks it is playing
@@ -41,10 +41,10 @@ public class MusicPlaybackTrack implements Parcelable {
     };
     public long mId;
     public long mSourceId;
-    public MiCoreApplication.IdType mSourceType;
+    public IdType mSourceType;
     public int mSourcePosition;
 
-    public MusicPlaybackTrack(long id, long sourceId, MiCoreApplication.IdType type, int sourcePosition) {
+    public MusicPlaybackTrack(long id, long sourceId, IdType type, int sourcePosition) {
         mId = id;
         mSourceId = sourceId;
         mSourceType = type;
@@ -54,7 +54,7 @@ public class MusicPlaybackTrack implements Parcelable {
     public MusicPlaybackTrack(Parcel in) {
         mId = in.readLong();
         mSourceId = in.readLong();
-        mSourceType = MiCoreApplication.IdType.getTypeById(in.readInt());
+        mSourceType = IdType.getTypeById(in.readInt());
         mSourcePosition = in.readInt();
     }
 
