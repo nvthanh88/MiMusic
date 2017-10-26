@@ -32,7 +32,6 @@ public class MusicCorePlayer {
 
     public static void playAll(long id , Context context)  {
         if (mMiCoreService != null) {
-            Toast.makeText(context, "Null", Toast.LENGTH_LONG).show();
             try {
                 mMiCoreService.play(id);
             } catch (RemoteException e) {
