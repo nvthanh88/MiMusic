@@ -81,7 +81,12 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             }
+        }else {
+            mToken = MusicCorePlayer.bindToService(this, this);
+            openScreen(ScreenIDs.ID.HOME, AlbumFragment.class, R.id.frameAlbumContent, null, false);
+            openScreen(ScreenIDs.ID.HOME, SongFragment.class, R.id.frameSongContent, null, false);
         }
+
 
 
     }
@@ -153,8 +158,6 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         mMiCoreService = MiCoreService.Stub.asInterface(service);
-
-
     }
 
     @Override

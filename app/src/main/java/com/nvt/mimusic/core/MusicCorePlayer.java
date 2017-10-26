@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.nvt.mimusic.MiCoreService;
@@ -22,62 +23,28 @@ import java.util.WeakHashMap;
 public class MusicCorePlayer {
     private static final long[] sEmptyList;
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
+    public static MiCoreService mMiCoreService = null;
 
     static {
         mConnectionMap = new WeakHashMap<Context, ServiceBinder>();
         sEmptyList = new long[0];
     }
-    public static MiCoreService mMiCoreService = null;
-    public static void playAll(final Context context, final long[] list, int position,
-                               final long sourceId, final IdType sourceType,
-                               final boolean forceShuffle) {
-        if (list == null || list.length == 0 || mMiCoreService == null) {
-            Toast.makeText(context,"Return",Toast.LENGTH_LONG).show();
-            return;
-        }
-        try {
-            if (forceShuffle) {
-                mMiCoreService.setShuffleMode(MusicService.SHUFFLE_NORMAL);
-            }
-            final long currentId = mMiCoreService.getAudioId();
 
-            final int currentQueuePosition = getQueuePosition();
-            if (position != -1 && currentQueuePosition == position && currentId == list[position]) {
-                final long[] playlist = getQueue();
-                if (Arrays.equals(list, playlist)) {
-                    mMiCoreService.play();
-                    return;
-                }
+    public static void playAll(long id , Context context)  {
+        if (mMiCoreService != null) {
+            Toast.makeText(context, "Null", Toast.LENGTH_LONG).show();
+            try {
+                mMiCoreService.play(id);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
-            if (position < 0) {
-                position = 0;
-            }
-            mMiCoreService.open(list, forceShuffle ? -1 : position, sourceId, sourceType.mId);
-            mMiCoreService.play();
-        } catch (final RemoteException ignored) {
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
-    }
-    public static final int getQueuePosition() {
-        try {
-            if (mMiCoreService != null) {
-                return mMiCoreService.getQueuePosition();
-            }
-        } catch (final RemoteException ignored) {
+        else {
+            Toast.makeText(context, " Core Service Null", Toast.LENGTH_LONG).show();
         }
-        return 0;
+
     }
-    public static final long[] getQueue() {
-        try {
-            if (mMiCoreService != null) {
-                return mMiCoreService.getQueue();
-            } else {
-            }
-        } catch (final RemoteException ignored) {
-        }
-        return sEmptyList;
-    }
+
     public static final class ServiceBinder implements ServiceConnection {
         private final ServiceConnection mCallback;
         private final Context mContext;
@@ -117,7 +84,6 @@ public class MusicCorePlayer {
     }
     public static final ServiceToken bindToService(final Context context,
                                                    final ServiceConnection callback) {
-
         Activity realActivity = ((Activity) context).getParent();
         if (realActivity == null) {
             realActivity = (Activity) context;

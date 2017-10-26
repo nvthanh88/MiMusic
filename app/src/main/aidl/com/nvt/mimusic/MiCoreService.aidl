@@ -12,7 +12,7 @@ interface MiCoreService {
         void open(in long [] list, int position, long sourceId, int sourceType);
         void stop();
         void pause();
-        void play();
+        void play(long id);
         void prev(boolean forcePrevious);
         void next();
         void enqueue(in long [] list, int action, long sourceId, int sourceType);

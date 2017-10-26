@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.nvt.mimusic.helper.MusicPlaybackState;
 
 
 /**
@@ -31,11 +32,13 @@ public class MusicDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onCreate(db);
+
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onUpgrade(db, oldVersion, newVersion);
     }
 }

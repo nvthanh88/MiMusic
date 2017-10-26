@@ -40,22 +40,16 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     List<SongModel> songModelList ;
     Context mAppContext;
     private long albumID;
-    private long[] songIDs;
+    private long songIDs;
 
     public SongAdapter(List<SongModel> songModelList, Context mAppContext, long albumID) {
         this.songModelList = songModelList;
         this.mAppContext = mAppContext;
         this.albumID = albumID;
-        this.songIDs = getSongIds();
-    }
-    public long[] getSongIds() {
-        long[] ret = new long[getItemCount()];
-        for (int i = 0; i < getItemCount(); i++) {
-            ret[i] = songModelList.get(i).getSongId();
-        }
 
-        return ret;
     }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -98,7 +92,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
 
-
+                MusicCorePlayer.playAll(songModelItem.getSongId(),mAppContext);
 
             }
 
@@ -133,7 +127,6 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
                         @Override
                         public void run() {
 
-                            MusicCorePlayer.playAll(mAppContext, songIDs, getAdapterPosition(), albumID, MiCoreApplication.IdType.Album, false);
                         }
                     }, 100);
 
