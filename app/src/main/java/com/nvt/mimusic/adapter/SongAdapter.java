@@ -1,5 +1,6 @@
 package com.nvt.mimusic.adapter;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MiCoreApplication;
 import com.nvt.mimusic.core.MusicCorePlayer;
 import com.nvt.mimusic.model.SongModel;
+import com.nvt.mimusic.view.activity.MiMainActivity;
 import com.nvt.mimusic.wiget.CircleImageView;
 
 import java.io.IOException;
@@ -38,11 +40,12 @@ import butterknife.ButterKnife;
 
 public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     List<SongModel> songModelList ;
-    Context mAppContext;
+    Activity mAppContext;
     private long albumID;
-    private long songIDs;
 
-    public SongAdapter(List<SongModel> songModelList, Context mAppContext, long albumID) {
+
+
+    public SongAdapter(List<SongModel> songModelList, Activity mAppContext, long albumID) {
         this.songModelList = songModelList;
         this.mAppContext = mAppContext;
         this.albumID = albumID;
@@ -93,6 +96,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
             public void onClick(View v) {
 
                 MusicCorePlayer.playAll(songModelItem.getSongId(),mAppContext);
+
 
             }
 

@@ -1,15 +1,13 @@
-package com.nvt.mimusic.helper;
+package com.nvt.mimusic.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nvt.mimusic.core.MiCoreApplication;
-import com.nvt.mimusic.database.MusicDatabase;
+import com.nvt.mimusic.helper.MusicPlaybackTrack;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 

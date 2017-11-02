@@ -1,4 +1,4 @@
-package com.nvt.mimusic.view.authen.fragment;
+package com.nvt.mimusic.view.fragment.authen.fragment;
 
 import android.widget.Button;
 

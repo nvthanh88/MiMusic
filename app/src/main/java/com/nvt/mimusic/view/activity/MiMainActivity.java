@@ -27,11 +27,10 @@ import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
 
 import com.nvt.mimusic.core.MusicCorePlayer;
-import com.nvt.mimusic.helper.SessionManager;
 import com.nvt.mimusic.model.AlbumModel;
 
-import com.nvt.mimusic.view.home.AlbumFragment;
-import com.nvt.mimusic.view.home.SongFragment;
+import com.nvt.mimusic.view.fragment.home.AlbumFragment;
+import com.nvt.mimusic.view.fragment.home.SongFragment;
 
 import java.util.List;
 
@@ -52,6 +51,7 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
     private List<AlbumModel> albumModelList ;
     private AlbumAdapter mAlbumAdapter;
     private MusicCorePlayer.ServiceToken mToken;
+
 
 
 
@@ -90,6 +90,12 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
 
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
 
     public void openScreen(final ScreenIDs.ID tab, final Class<? extends MiBaseFragment> fragmentClass, final int frameID, final Bundle bundles, final boolean addToBackStack) {
         runOnUiThread(new Runnable() {
@@ -143,7 +149,7 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mToken = MusicCorePlayer.bindToService(this, this);
+                    mToken = MusicCorePlayer.bindToService(this,this);
                     openScreen(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
                     openScreen(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
 
@@ -164,4 +170,5 @@ public class MiMainActivity extends AppCompatActivity implements ServiceConnecti
     public void onServiceDisconnected(ComponentName name) {
 
     }
+
 }

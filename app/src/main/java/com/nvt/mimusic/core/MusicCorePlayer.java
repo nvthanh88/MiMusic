@@ -30,19 +30,59 @@ public class MusicCorePlayer {
         sEmptyList = new long[0];
     }
 
-    public static void playAll(long id , Context context)  {
-        if (mMiCoreService != null) {
-            try {
-                mMiCoreService.play(id);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+    public static void playAll(final Context context, final long[] list, int position,
+                               final long sourceId, final IdType sourceType,
+                               final boolean forceShuffle)  {
+        if (list == null || list.length == 0 || mMiCoreService == null) {
+            return;
         }
-        else {
-            Toast.makeText(context, " Core Service Null", Toast.LENGTH_LONG).show();
+        try {
+            if (forceShuffle) {
+                mMiCoreService.setShuffleMode(MusicService.SHUFFLE_NORMAL);
+            }
+            final long currentId = mMiCoreService.getAudioId();
+            final int currentQueuePosition = getQueuePosition();
+            if (position != -1 && currentQueuePosition == position && currentId == list[position]) {
+                final long[] playlist = getQueue();
+                if (Arrays.equals(list, playlist)) {
+                    mMiCoreService.play();
+                    return;
+                }
+            }
+            if (position < 0) {
+                position = 0;
+            }
+            mMiCoreService.prepareData(list, forceShuffle ? -1 : position, sourceId, sourceType.mId);
+            mMiCoreService.play();
+        } catch (final RemoteException ignored) {
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
 
     }
+    /*Get Queue*/
+
+    public static final long[] getQueue() {
+        try {
+            if (mMiCoreService != null) {
+                return mMiCoreService.getQueue();
+            } else {
+            }
+        } catch (final RemoteException ignored) {
+        }
+        return sEmptyList;
+    }
+    public static final int getQueuePosition() {
+        try {
+            if (mMiCoreService != null) {
+                return mMiCoreService.getQueuePosition();
+            }
+        } catch (final RemoteException ignored) {
+        }
+        return 0;
+    }
+
+    /*Bind Service*/
 
     public static final class ServiceBinder implements ServiceConnection {
         private final ServiceConnection mCallback;

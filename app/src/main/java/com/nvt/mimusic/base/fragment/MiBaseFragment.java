@@ -1,5 +1,6 @@
 package com.nvt.mimusic.base.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,7 @@ import butterknife.Unbinder;
 
 public abstract class MiBaseFragment extends Fragment {
     protected MiMainActivity mActivity;
-    protected Context mAppContext;
+    protected Activity mAppContext;
     protected View mView;
     protected Unbinder mUnBinder;
     protected Boolean mIsViewInitialized;
@@ -30,7 +31,7 @@ public abstract class MiBaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if( mActivity!= null)
         {
-            mAppContext = mActivity.getApplicationContext();
+            mAppContext = getActivity();
         }
     }
 
@@ -63,7 +64,7 @@ public abstract class MiBaseFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity context) {
         super.onAttach(context);
         mActivity = (MiMainActivity) context;
     }

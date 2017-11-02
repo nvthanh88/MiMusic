@@ -1,4 +1,4 @@
-package com.nvt.mimusic.core;
+package com.nvt.mimusic.loader;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,19 +1,15 @@
-package com.nvt.mimusic.view.home;
+package com.nvt.mimusic.view.fragment.home;
 
 import android.content.res.Resources;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.adapter.AlbumAdapter;
 import com.nvt.mimusic.adapter.SongAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
-import com.nvt.mimusic.core.AlbumDataLoader;
-import com.nvt.mimusic.core.SongDataLoader;
+import com.nvt.mimusic.loader.SongDataLoader;
 import com.nvt.mimusic.helper.GridSpacingItemDecoration;
 import com.nvt.mimusic.model.SongModel;
 
