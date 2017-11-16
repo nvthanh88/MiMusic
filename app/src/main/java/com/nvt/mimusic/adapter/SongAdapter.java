@@ -95,9 +95,6 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
 
-                MusicCorePlayer.playAll(songModelItem.getSongId(),mAppContext);
-
-
             }
 
         });

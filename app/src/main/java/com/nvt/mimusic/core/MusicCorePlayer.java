@@ -41,7 +41,7 @@ public class MusicCorePlayer {
                 mMiCoreService.setShuffleMode(MusicService.SHUFFLE_NORMAL);
             }
             final long currentId = mMiCoreService.getAudioId();
-            final int currentQueuePosition = getQueuePosition();
+            final int currentQueuePosition = getQueuePosition();//-1
             if (position != -1 && currentQueuePosition == position && currentId == list[position]) {
                 final long[] playlist = getQueue();
                 if (Arrays.equals(list, playlist)) {
@@ -137,5 +137,19 @@ public class MusicCorePlayer {
             return new ServiceToken(contextWrapper);
         }
         return null;
+    }
+    public static void unbindFromService(final ServiceToken token) {
+        if (token == null) {
+            return;
+        }
+        final ContextWrapper mContextWrapper = token.mWrappedContext;
+        final ServiceBinder mBinder = mConnectionMap.remove(mContextWrapper);
+        if (mBinder == null) {
+            return;
+        }
+        mContextWrapper.unbindService(mBinder);
+        if (mConnectionMap.isEmpty()) {
+            mMiCoreService = null;
+        }
     }
 }

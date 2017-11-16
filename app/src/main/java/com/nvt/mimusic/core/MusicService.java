@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
@@ -44,6 +45,10 @@ import java.util.ArrayList;
  */
 
 public class MusicService extends Service {
+    public static final String PLAYSTATE_CHANGED ="mimusic.playstatechange" ;
+    public static final String REFRESH ="mimusic.refresh" ;
+    public static final String PLAYLIST_CHANGED ="mimusic.playlistchange" ;
+    public static final String TRACK_ERROR ="mimusic.trackerror" ;
     private int mPlayPos = -1;
     private int mNextPlayPos = -1;
     private MusicPlayerHandler mPlayerHandler;
@@ -54,8 +59,8 @@ public class MusicService extends Service {
     private static final int FADEUP = 7;
     public static final int SHUFFLE_AUTO = 2;
     private static final int FOCUSCHANGE = 5;
-    public static final String META_CHANGED = "com.naman14.timber.metachanged";
-    public static final String QUEUE_CHANGED = "com.naman14.timber.queuechanged";
+    public static final String META_CHANGED = "mimusic.metachanged";
+    public static final String QUEUE_CHANGED = "mimusic.queuechanged";
     private static final String TAG = "MusicService";
     public static final int MAX_HISTORY_SIZE = 1000;
     private ArrayList<MusicPlaybackTrack> mPlaylist = new ArrayList<MusicPlaybackTrack>(100);
@@ -66,6 +71,8 @@ public class MusicService extends Service {
             mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
         }
     };
+    private Cursor mCursor;
+    private Cursor mAlbumCursor;
     private MultiPlayer mPlayer;
     public static final int SHUFFLE_NORMAL = 1;
     private ContentObserver mMediaStoreObserver;
@@ -147,6 +154,10 @@ public class MusicService extends Service {
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
     }
 
+    public interface TrackErrorExtra {
+        String TRACK_NAME = "trackname";
+    }
+
     private static final class MusicPlayerHandler extends Handler {
         private final WeakReference<MusicService> mService;
 
@@ -178,7 +189,6 @@ public class MusicService extends Service {
         if (track != null) {
             return track.mId;
         }
-
         return -1;
     }
     public MusicPlaybackTrack getCurrentTrack() {
@@ -206,9 +216,54 @@ public class MusicService extends Service {
                         break;
                     }
                 }
+                if (newList)
+                {
+                    addToPlayList(list,position,sourceId,sourceType);
+                }
             }
         }
     }
+
+    public int getQueuePosition() {
+        synchronized (this) {
+            return mPlayPos;
+        }
+    }
+    private void addToPlayList(final long[] list, int position, long sourceId, MiCoreApplication.IdType sourceType) {
+        final int addlen = list.length;
+        if (position < 0) {
+            mPlaylist.clear();
+            position = 0;
+        }
+
+        mPlaylist.ensureCapacity(mPlaylist.size() + addlen);
+        if (position > mPlaylist.size()) {
+            position = mPlaylist.size();
+        }
+
+        final ArrayList<MusicPlaybackTrack> arrayList = new ArrayList<MusicPlaybackTrack>(addlen);
+        for (int i = 0; i < list.length; i++) {
+            arrayList.add(new MusicPlaybackTrack(list[i], sourceId, sourceType, i));
+        }
+
+        mPlaylist.addAll(position, arrayList);
+
+        if (mPlaylist.size() == 0) {
+            closeCursor();
+            //notifyChange(META_CHANGED);
+        }
+    }
+    private synchronized void closeCursor() {
+        if (mCursor != null) {
+            mCursor.close();
+            mCursor = null;
+        }
+        if (mAlbumCursor != null) {
+            mAlbumCursor.close();
+            mAlbumCursor = null;
+        }
+    }
+
 
 
     /*Service Stub*/

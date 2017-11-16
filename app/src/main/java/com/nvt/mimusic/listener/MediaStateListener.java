@@ -8,6 +8,7 @@ public interface MediaStateListener {
 
     void restartLoader();
 
+
     void onPlaylistChanged();
 
 

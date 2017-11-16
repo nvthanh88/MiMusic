@@ -40,12 +40,11 @@ public class MusicDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onUpgrade(db, oldVersion, newVersion);
-        RecentStore.getRecentStoreInstance(mContext).onUpgrade(db);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onDowngrade(db,oldVersion,newVersion);
-        RecentStore.getRecentStoreInstance(mContext).onDownGrade(db);
+
     }
 }
