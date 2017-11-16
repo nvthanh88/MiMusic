@@ -1,46 +1,21 @@
 package com.nvt.mimusic.view.activity;
 
-import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 
 import android.content.ComponentName;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
 import com.nvt.mimusic.MiCoreService;
-import com.nvt.mimusic.R;
-import com.nvt.mimusic.adapter.AlbumAdapter;
-
-import com.nvt.mimusic.base.fragment.MiBaseFragment;
-import com.nvt.mimusic.constant.ScreenIDs;
-
 import com.nvt.mimusic.core.MusicCorePlayer;
 import com.nvt.mimusic.core.MusicService;
 import com.nvt.mimusic.listener.MediaStateListener;
-import com.nvt.mimusic.model.AlbumModel;
-
 import com.nvt.mimusic.utils.PlayBackStatus;
-import com.nvt.mimusic.view.fragment.home.AlbumFragment;
-import com.nvt.mimusic.view.fragment.home.SongFragment;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import static com.nvt.mimusic.core.MusicCorePlayer.mMiCoreService;
 
 public class MiBaseActivity extends AppCompatActivity implements ServiceConnection,MediaStateListener{

@@ -36,6 +36,7 @@ public class MiMainActivity extends MiBaseActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE))
             {
+
             } else
             {
                 ActivityCompat.requestPermissions(this,
