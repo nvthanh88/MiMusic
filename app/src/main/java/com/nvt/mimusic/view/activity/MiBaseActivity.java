@@ -24,17 +24,23 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
     private MusicCorePlayer.ServiceToken mToken;
     private ArrayList<MediaStateListener> mediaStateListenerArrayList = new ArrayList<>();
 
+
+    /**
+     * On Create Life Cycle try to bind Core Service
+     * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlayBackStatus = new PlayBackStatus(this);
         //Bound Service
-        mToken = MusicCorePlayer.bindToService(getApplicationContext(),this);
+        mToken = MusicCorePlayer.bindToService(this,this);
                 //make volume keys change multimedia volume even if music is not playing now
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
     }
-
+    /**
+     * On Start Life Cycle register Receiver
+     * */
     @Override
     protected void onStart() {
         super.onStart();
@@ -81,7 +87,9 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
 
 
     }
-
+    /**
+     * Connect to Remote Service use aidl
+     * */
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.d(TAG, "onServiceConnected: Connect to service "+ service.toString());

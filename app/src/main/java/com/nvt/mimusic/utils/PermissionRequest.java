@@ -49,7 +49,7 @@ public class PermissionRequest {
             permissionCallback.permissionGranted();
             return;
         }
-        PermissionModel permissionModel = new PermissionModel(new ArrayList<String>(Arrays.asList(permissions)), permissionCallback);
+        PermissionModel permissionModel = new PermissionModel(new ArrayList<>(Arrays.asList(permissions)), permissionCallback);
         permissionRequests.add(permissionModel);
 
         activity.requestPermissions(permissions, permissionModel.getRequestCode());
