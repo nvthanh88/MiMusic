@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.nvt.mimusic.model.PermissionModel;
+import com.nvt.mimusic.view.activity.MiMainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +31,7 @@ public class PermissionRequest {
    /*Save Permission use SharedPreferences*/
     public static void init(Context context) {
         sharedPreferences = context.getSharedPreferences("pl.tajchert.runtimepermissionhelper", Context.MODE_PRIVATE);
-        PermissionRequest.mContext = mContext;
+        PermissionRequest.mContext = context;
     }
     /**
      * If we override other methods, lets do it as well, and keep name same as it is already weird enough.
@@ -170,4 +173,8 @@ public class PermissionRequest {
         }
         return PackageManager.PERMISSION_GRANTED == mContext.checkSelfPermission(permissionName);
     }
+
+
+
+
 }
