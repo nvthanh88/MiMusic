@@ -56,6 +56,10 @@
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/cmn_white"
+            style="@style/Layout.WrapWidthHeight"
+            android:text="@string/ToolbarBottomTabSearchString"/>
 
     </LinearLayout>
     <LinearLayout

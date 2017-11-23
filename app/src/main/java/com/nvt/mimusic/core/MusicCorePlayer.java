@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nvt.mimusic.MiCoreService;
@@ -24,6 +25,35 @@ public class MusicCorePlayer {
     private static final long[] sEmptyList;
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
     public static MiCoreService mMiCoreService = null;
+    public static MusicService mMusicService;
+
+
+    /**
+     * Get position when playing music
+     * */
+    public static long position (){
+        if (mMiCoreService != null)
+        {
+            try {
+                return mMiCoreService.position();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return  0;
+    }
+    /**
+     * Check Music player is playing
+     * */
+    public static final boolean isPlaying(){
+        if(mMiCoreService != null)
+            try {
+                return  mMiCoreService.isPlaying();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            return false;
+    }
 
     static {
         mConnectionMap = new WeakHashMap<Context, ServiceBinder>();
@@ -80,6 +110,86 @@ public class MusicCorePlayer {
         } catch (final RemoteException ignored) {
         }
         return 0;
+    }
+
+    public static void seek(int progress) {
+        if (mMiCoreService != null)
+        {
+            try {
+                mMiCoreService.seek(progress);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void next() {
+        if (mMiCoreService != null)
+        {
+            try {
+                mMiCoreService.next();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void prev() {
+        if (mMiCoreService != null)
+        {
+            try {
+                mMiCoreService.prev(true);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String getTrackName() {
+        if (mMiCoreService != null) {
+            try {
+                return mMiCoreService.getTrackName();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+            return null;
+    }
+
+    public static String getArtistName() {
+        if (mMiCoreService != null)
+        {
+            try {
+                return mMiCoreService.getArtistName();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static long getCurrentAlbumId() {
+        if (mMiCoreService != null)
+        {
+            try {
+                return mMiCoreService.getAlbumId();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return  -1;
+    }
+
+    public static long duration() {
+        if (mMiCoreService != null)
+        {
+            try {
+                return mMiCoreService.duration();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return  0;
     }
 
     /*Bind Service*/

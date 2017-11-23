@@ -1,8 +1,6 @@
 package com.nvt.mimusic.base.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +10,7 @@ import android.view.ViewGroup;
 import com.nvt.mimusic.view.activity.MiMainActivity;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import android.app.Fragment;
 
 /**
  * Created by Admin on 10/16/17.
@@ -103,11 +102,7 @@ public abstract class MiBaseFragment extends Fragment {
     //Call Back Fragment Method
     public void onComeBackFragment(Bundle mBundle) {
     }
-    //Open Screen Method
-    /*protected void openScreen(final ScreenIDs.IDs tab, final Class<? extends GBaseFragment> fragmentClass, final Bundle bundles,
-                              final boolean shouldAddToBackstack) {
-        if(mActivity != null) mActivity.openScreen(tab, fragmentClass, bundles, shouldAddToBackstack);
-    }*/
+
 
     @Override
     public void onResume() {

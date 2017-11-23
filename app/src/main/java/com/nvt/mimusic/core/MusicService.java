@@ -24,7 +24,9 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
+import android.provider.MediaStore;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -49,43 +51,16 @@ public class MusicService extends Service {
     public static final String REFRESH ="mimusic.refresh" ;
     public static final String PLAYLIST_CHANGED ="mimusic.playlistchange" ;
     public static final String TRACK_ERROR ="mimusic.trackerror" ;
-    private int mPlayPos = -1;
-    private int mNextPlayPos = -1;
-    private MusicPlayerHandler mPlayerHandler;
-    private int mRepeatMode = REPEAT_NONE;
-    public static final int REPEAT_NONE = 0;
-    public static final int REPEAT_CURRENT = 1;
-    private static final int FADEDOWN = 6;
-    private static final int FADEUP = 7;
-    public static final int SHUFFLE_AUTO = 2;
-    private static final int FOCUSCHANGE = 5;
     public static final String META_CHANGED = "mimusic.metachanged";
     public static final String QUEUE_CHANGED = "mimusic.queuechanged";
     private static final String TAG = "MusicService";
-    public static final int MAX_HISTORY_SIZE = 1000;
-    private ArrayList<MusicPlaybackTrack> mPlaylist = new ArrayList<MusicPlaybackTrack>(100);
-    private final AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
-
-        @Override
-        public void onAudioFocusChange(final int focusChange) {
-            mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
-        }
-    };
-    private Cursor mCursor;
-    private Cursor mAlbumCursor;
-    private MultiPlayer mPlayer;
     public static final int SHUFFLE_NORMAL = 1;
-    private ContentObserver mMediaStoreObserver;
     private HandlerThread mHandlerThread;
-    private ComponentName mMediaButtonReceiverComponent;
-    private SharedPreferences mPreferences;
-    private boolean mServiceInUse = false;
-    private final IBinder mBinder = new ServiceStub(this);
     private AudioManager mAudioManager;
+    private MultiPlayer mPlayer;
 
 
-
-
+    private Cursor mCursor;
 
 
     @Override
@@ -95,21 +70,24 @@ public class MusicService extends Service {
         mHandlerThread = new HandlerThread("MusicPlayerHandler",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         mHandlerThread.start();
-        mPlayerHandler = new MusicPlayerHandler(this, mHandlerThread.getLooper());
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mPlayer = new MultiPlayer(this);
-        mPlayer.setHandler(mPlayerHandler);
+
     }
 
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
+
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
@@ -154,410 +132,64 @@ public class MusicService extends Service {
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
     }
 
-    public interface TrackErrorExtra {
-        String TRACK_NAME = "trackname";
-    }
-
-    private static final class MusicPlayerHandler extends Handler {
-        private final WeakReference<MusicService> mService;
-
-        public MusicPlayerHandler(final MusicService service, final Looper looper) {
-            super(looper);
-            mService = new WeakReference<>(service);
+    /**
+     * Get position from Media player
+     * */
+    public long position(){
+        if (mPlayer.isInitialized())
+        {
+            return mPlayer.position();
         }
-
-
-        @Override
-        public void handleMessage(final Message msg) {
-            final MusicService service = mService.get();
-            if (service == null) {
-                return;
-            }
-
-            synchronized (service) {
-                switch (msg.what) {
-
-                }
-            }
-        }
-
+        return  -1;
     }
-    /*Get Audio ID*/
-
-    public long getAudioId() {
-        MusicPlaybackTrack track = getCurrentTrack();
-        if (track != null) {
-            return track.mId;
+    /**
+     * Seek to position
+     * */
+    public long seek(long position) {
+        if (mPlayer.isInitialized()) {
+            if (position < 0) {
+                position = 0;
+            } else if (position > mPlayer.duration()) {
+                position = mPlayer.duration();
+            }
+            long result = mPlayer.seek(position);
+            //notifyChange(POSITION_CHANGED);
+            return result;
         }
         return -1;
     }
-    public MusicPlaybackTrack getCurrentTrack() {
-        return getTrack(mPlayPos);
-    }
-    public synchronized MusicPlaybackTrack getTrack(int index) {
-        if (index >= 0 && index < mPlaylist.size() && mPlayer.isInitialized()) {
-            return mPlaylist.get(index);
-        }
-
-        return null;
-    }
-    /*Prepare (Set DataSource)*/
-    public void prepareData(final long[] list, final int position, long sourceId, MiCoreApplication.IdType sourceType) {
-        synchronized (this)
-        {
-            final long oldId = getAudioId();
-            final int listLength = list.length;
-            boolean newList = true;
-            if (mPlaylist.size() == listLength) {
-                newList = false;
-                for (int i = 0; i < listLength; i++) {
-                    if (list[i] != mPlaylist.get(i).mId) {
-                        newList = true;
-                        break;
-                    }
-                }
-                if (newList)
-                {
-                    addToPlayList(list,position,sourceId,sourceType);
-                }
-            }
-        }
-    }
-
-    public int getQueuePosition() {
+    /**
+     * Get track name
+     * */
+    public String getTrackName() {
         synchronized (this) {
-            return mPlayPos;
+            if (mCursor == null) {
+                return null;
+            }
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE));
         }
     }
-    private void addToPlayList(final long[] list, int position, long sourceId, MiCoreApplication.IdType sourceType) {
-        final int addlen = list.length;
-        if (position < 0) {
-            mPlaylist.clear();
-            position = 0;
-        }
-
-        mPlaylist.ensureCapacity(mPlaylist.size() + addlen);
-        if (position > mPlaylist.size()) {
-            position = mPlaylist.size();
-        }
-
-        final ArrayList<MusicPlaybackTrack> arrayList = new ArrayList<MusicPlaybackTrack>(addlen);
-        for (int i = 0; i < list.length; i++) {
-            arrayList.add(new MusicPlaybackTrack(list[i], sourceId, sourceType, i));
-        }
-
-        mPlaylist.addAll(position, arrayList);
-
-        if (mPlaylist.size() == 0) {
-            closeCursor();
-            //notifyChange(META_CHANGED);
+    /**
+    * Get ArtistName
+    * */
+    public String getArtistName() {
+        synchronized (this) {
+            if (mCursor == null) {
+                return null;
+            }
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST));
         }
     }
-    private synchronized void closeCursor() {
-        if (mCursor != null) {
-            mCursor.close();
-            mCursor = null;
+    /**
+     * Get duration
+     * */
+    public long duration() {
+        if (mPlayer.isInitialized()) {
+            return mPlayer.duration();
         }
-        if (mAlbumCursor != null) {
-            mAlbumCursor.close();
-            mAlbumCursor = null;
-        }
+        return -1;
     }
 
-
-
-    /*Service Stub*/
-
-    private static final class ServiceStub extends MiCoreService.Stub {
-
-        private final WeakReference<MusicService> mService;
-
-        private ServiceStub(final MusicService service) {
-            mService = new WeakReference<MusicService>(service);
-        }
-
-
-        @Override
-        public void openFile(final String path) throws RemoteException {
-
-        }
-
-        @Override
-        public void prepareData(long[] list, int position, long sourceId, int sourceType) throws RemoteException {
-
-        }
-
-
-        @Override
-        public void stop() throws RemoteException {
-
-        }
-
-        @Override
-        public void pause() throws RemoteException {
-
-        }
-
-        @Override
-        public void play() throws RemoteException {
-
-        }
-
-        @Override
-        public void prev(boolean forcePrevious) throws RemoteException {
-        }
-
-        @Override
-        public void next() throws RemoteException {
-
-        }
-
-        @Override
-        public void enqueue(final long[] list, final int action, long sourceId, int sourceType)
-                throws RemoteException {
-
-        }
-
-        @Override
-        public void moveQueueItem(final int from, final int to) throws RemoteException {
-
-        }
-
-        @Override
-        public void refresh() throws RemoteException {
-
-        }
-
-        @Override
-        public void playlistChanged() throws RemoteException {
-
-        }
-
-        @Override
-        public boolean isPlaying() throws RemoteException {
-            return false;
-        }
-
-        @Override
-        public long[] getQueue() throws RemoteException {
-            return new long[0];
-        }
-
-        @Override
-        public long getQueueItemAtPosition(int position) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public int getQueueSize() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public int getQueueHistoryPosition(int position) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public int getQueueHistorySize() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public int[] getQueueHistoryList() throws RemoteException {
-
-            return new int[0];
-        }
-
-        @Override
-        public long duration() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public long position() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public long seek(final long position) throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public void seekRelative(final long deltaInMs) throws RemoteException {
-        }
-
-        @Override
-        public long getAudioId() throws RemoteException {
-            return mService.get().getAudioId();
-        }
-
-        @Override
-        public MusicPlaybackTrack getCurrentTrack() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public MusicPlaybackTrack getTrack(int index) throws RemoteException {
-            return null;
-        }
-
-
-        @Override
-        public long getNextAudioId() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public long getPreviousAudioId() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public long getArtistId() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public long getAlbumId() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public String getArtistName() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public String getTrackName() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public String getAlbumName() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public String getPath() throws RemoteException {
-            return null;
-        }
-
-        @Override
-        public int getQueuePosition() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public void setQueuePosition(final int index) throws RemoteException {
-
-        }
-
-        @Override
-        public int getShuffleMode() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public void setShuffleMode(final int shufflemode) throws RemoteException {
-
-        }
-
-        @Override
-        public int getRepeatMode() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public void setRepeatMode(final int repeatmode) throws RemoteException {
-
-        }
-
-        @Override
-        public int removeTracks(final int first, final int last) throws RemoteException {
-            return 0;
-        }
-
-
-        @Override
-        public int removeTrack(final long id) throws RemoteException {
-            return 0;
-        }
-
-
-        @Override
-        public boolean removeTrackAtPosition(final long id, final int position)
-                throws RemoteException {
-            return false;
-
-        }
-
-
-        @Override
-        public int getMediaMountedCount() throws RemoteException {
-            return 0;
-        }
-
-        @Override
-        public int getAudioSessionId() throws RemoteException {
-            return 0;
-        }
-
-
-    }
-
-    /*Multi Player*/
-
-    private static final class MultiPlayer implements MediaPlayer.OnErrorListener,
-            MediaPlayer.OnCompletionListener {
-
-        private final WeakReference<MusicService> mService;
-
-        private MediaPlayer mCurrentMediaPlayer = new MediaPlayer();
-
-        private MediaPlayer mNextMediaPlayer;
-
-        private Handler mHandler;
-
-        private boolean mIsInitialized = false;
-
-        private String mNextMediaPath;
-
-
-        public MultiPlayer(final MusicService service) {
-            mService = new WeakReference<MusicService>(service);
-            mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
-
-        }
-
-
-
-        public void setHandler(final Handler handler) {
-            mHandler = handler;
-        }
-
-
-        public boolean isInitialized() {
-            return mIsInitialized;
-        }
-
-
-
-
-        @Override
-        public boolean onError(final MediaPlayer mp, final int what, final int extra) {
-            Log.w(TAG, "Music Server Error what: " + what + " extra: " + extra);
-
-            return false;
-        }
-
-
-        @Override
-        public void onCompletion(final MediaPlayer mp) {
-
-        }
-    }
 
 
 

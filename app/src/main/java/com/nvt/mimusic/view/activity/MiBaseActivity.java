@@ -5,15 +5,23 @@ import android.content.ComponentName;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import com.nvt.mimusic.MiCoreService;
+import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MusicCorePlayer;
 import com.nvt.mimusic.core.MusicService;
 import com.nvt.mimusic.listener.MediaStateListener;
 import com.nvt.mimusic.utils.PlayBackStatus;
+import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
+import com.nvt.mimusic.view.panel.SlidingUpPanelLayout;
+
 import java.util.ArrayList;
 
 import static com.nvt.mimusic.core.MusicCorePlayer.mMiCoreService;
@@ -128,4 +136,72 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
                 mediaStateListener.onMetaChanged();
         }
     }
+    /**
+     * Setup Slide Panel
+     *
+     * */
+    public void setupSlidePanel(SlidingUpPanelLayout panelLayout)
+    {
+        panelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+
+            }
+        });
+    }
+    public void setMediaStateListenerListener(final MediaStateListener status) {
+        if (status == this) {
+            throw new UnsupportedOperationException("Override the method, don't add a listener");
+        }
+
+        if (status != null) {
+            mediaStateListenerArrayList.add(status);
+        }
+    }
+    public class initQuickControls extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            QuickControlFragment fragment1 = new QuickControlFragment();
+            FragmentManager fragmentManager1 = getSupportFragmentManager();
+            fragmentManager1.beginTransaction()
+                    .replace(R.id.quickcontrols_container, fragment1).commitAllowingStateLoss();
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+//            QuickControlsFragment.topContainer.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    NavigationUtils.navigateToNowplaying(BaseActivity.this, false);
+//                }
+//            });
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+    }
+
 }
