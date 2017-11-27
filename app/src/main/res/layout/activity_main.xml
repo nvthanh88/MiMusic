@@ -17,7 +17,6 @@
     <include
         android:id="@+id/toolbarBottom"
         layout="@layout/bottom_toolbar"
-
         >
     </include>
     <FrameLayout
@@ -25,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbarTop"
-        android:layout_above="@id/slidingLayout"
+        android:layout_above="@id/toolbarBottom"
         >
         <ScrollView
             android:orientation="vertical"
@@ -59,17 +58,7 @@
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
-    <LinearLayout
-        android:id="@+id/frameQuickControl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/frameContent"
-        android:layout_above="@id/toolbarBottom">
-        <include layout="@layout/include_list_viewpager">
 
-        </include>
-
-    </LinearLayout>
-
-
+        <!--<include layout="@layout/include_list_viewpager">
+        </include>-->
 </RelativeLayout>

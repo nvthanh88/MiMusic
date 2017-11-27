@@ -35,8 +35,8 @@ public class MiMainActivity extends MiBaseActivity {
     private Context context;
     private ScreenIDs.ID mCurrentTab;
     private MiBaseFragment mCurrentFragment;
-    @BindView(R.id.slidingLayout)
-    SlidingUpPanelLayout panelLayout;
+    /*@BindView(R.id.slidingLayout)
+    SlidingUpPanelLayout panelLayout;*/
     @BindView(R.id.toolbarTop)
     Toolbar toolbarTop;
 
@@ -51,13 +51,13 @@ public class MiMainActivity extends MiBaseActivity {
         /**
          * Check OS Version > 6 ask for permission and else Todo smt
          * */
-        setupSlidePanel(panelLayout);
+        //setupSlidePanel(panelLayout);
         if (MiCoreApplication.isMarshmallow())
         {
             checkPermissionAndThenLoad();
         }else {
             gotoHomeFragment.run();
-            new initQuickControls().execute("");
+            //new initQuickControls().execute("");
         }
         /**
          * Setup palnel
@@ -74,16 +74,16 @@ public class MiMainActivity extends MiBaseActivity {
         //check for permission
         if (PermissionRequest.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             gotoHomeFragment.run();
-            new initQuickControls().execute("");
+            //new initQuickControls().execute("");
         } else {
             if (PermissionRequest.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Snackbar.make(panelLayout, "MiMusic Need READ_EXTERNAL_STORAGE Permission to load  media", Snackbar.LENGTH_LONG)
+                /*Snackbar.make(panelLayout, "MiMusic Need READ_EXTERNAL_STORAGE Permission to load  media", Snackbar.LENGTH_LONG)
                         .setAction("OK", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 PermissionRequest.askForPermission(MiMainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE, permissionReadStorageCallback);
                             }
-                        }).show();
+                        }).show();*/
             } else {
                 PermissionRequest.askForPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, permissionReadStorageCallback);
             }
@@ -93,7 +93,7 @@ public class MiMainActivity extends MiBaseActivity {
         @Override
         public void permissionGranted() {
             gotoHomeFragment.run();
-            new initQuickControls().execute("");
+            //new initQuickControls().execute("");
         }
 
         @Override
