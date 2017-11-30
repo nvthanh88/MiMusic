@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,20 +88,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         holder.imgOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = albumModelItem.getAlbumId();
-                Uri contentUri = ContentUris.withAppendedId(
-                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,id);
+                Toast.makeText(mAppContext,"Album: " + albumModelItem.getAlbumId(),Toast.LENGTH_LONG).show();
 
-                MediaPlayer mMediaPlayer = new MediaPlayer();
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mMediaPlayer.setDataSource(mAppContext, contentUri);
-                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mMediaPlayer.prepare();
-                    mMediaPlayer.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
             }
         });
@@ -114,7 +103,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         return albumModelList.size();
     }
 
-     class ViewHolder extends RecyclerView.ViewHolder{
+     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
          @BindView(R.id.txtAlbumTile)
          TextView txtAlbumTile;
          @BindView(R.id.txtAlbumSongs)
@@ -127,10 +116,15 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
          ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
-
+            itemView.setOnClickListener(this);
         }
-    }
+         @Override
+         public void onClick(View v) {
+             Log.i("Adapter", "onClick: ");
+             //Todo load album content
+             Toast.makeText(mAppContext,"Album: " + albumModelList.get(getAdapterPosition()).getAlbumId(),Toast.LENGTH_LONG).show();
+         }
+     }
 
 
 }
