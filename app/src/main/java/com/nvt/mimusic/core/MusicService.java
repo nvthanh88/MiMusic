@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
+import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 
 import android.os.Build;
@@ -32,6 +33,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,7 +41,9 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nvt.mimusic.MiCoreService;
 
+import com.nvt.mimusic.helper.MediaButtonIntentReceiver;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
+import com.nvt.mimusic.helper.Shuffler;
 
 
 import java.io.IOException;
@@ -60,6 +64,9 @@ public class MusicService extends Service {
     public static final String META_CHANGED = "mimusic.metachanged";
     public static final String QUEUE_CHANGED = "mimusic.queuechanged";
     private static final String TAG = "MusicService";
+    private static final boolean F = false;
+    private static  boolean mServiceInUse = false;
+    private final IBinder mBinder = new ServiceStub(this);
 
     private HandlerThread mHandlerThread;
     private AudioManager mAudioManager;
@@ -75,6 +82,22 @@ public class MusicService extends Service {
     public static final int SHUFFLE_AUTO = 2;
     private boolean mIsSupposedToBePlaying = false;
     private boolean mShowAlbumArtOnLockscreen;
+    private static Shuffler mShuffler = new Shuffler();
+    private static final int IDCOLIDX = 0;
+    private int mOpenFailedCounter = 0;
+    private String mFileToPlay;
+
+
+    private static final String[] PROJECTION = new String[]{
+            "audio._id AS _id", MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.MIME_TYPE, MediaStore.Audio.Media.ALBUM_ID,
+            MediaStore.Audio.Media.ARTIST_ID
+    };
+    private static final String[] ALBUM_PROJECTION = new String[]{
+            MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ARTIST,
+            MediaStore.Audio.Albums.LAST_YEAR
+    };
 
 
     @Override
@@ -88,6 +111,13 @@ public class MusicService extends Service {
         mPlayer = new MultiPlayer(this);
 
     }
+    private final AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+
+        @Override
+        public void onAudioFocusChange(final int focusChange) {
+            //mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
+        }
+    };
 
 
 
@@ -101,7 +131,8 @@ public class MusicService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        mServiceInUse = true;
+        return mBinder;
     }
 
     @Override
@@ -215,6 +246,7 @@ public class MusicService extends Service {
         return -1;
     }
     public MusicPlaybackTrack getCurrentTrack() {
+
         return getTrack(mPlayPos);
     }
     public synchronized MusicPlaybackTrack getTrack(int index) {
@@ -255,14 +287,153 @@ public class MusicService extends Service {
             } else {
                 mPlayPos = mShuffler.nextInt(mPlaylist.size());
             }
-            mHistory.clear();
+            //mHistory.clear();
             openCurrentAndNext();
             if (oldId != getAudioId()) {
-                notifyChange(META_CHANGED);
+                //notifyChange(META_CHANGED);
             }
         }
 
     }
+    /**
+     * Open current and next
+     *
+     * */
+    private void openCurrentAndNext() {
+        openCurrentAndMaybeNext(true);
+    }
+
+    private void openCurrentAndMaybeNext(final boolean openNext) {
+        synchronized (this) {
+            closeCursor();
+
+            if (mPlaylist.size() == 0) {
+                return;
+            }
+            stop(false);
+
+            boolean shutdown = false;
+
+            updateCursor(mPlaylist.get(mPlayPos).mId);
+            while (true) {
+                if (mCursor != null
+                        && openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
+                        + mCursor.getLong(IDCOLIDX))) {
+                    break;
+                }
+
+                closeCursor();
+                if (mOpenFailedCounter++ < 10 && mPlaylist.size() > 1) {
+                /*    final int pos = getNextPosition(false);
+                    if (pos < 0) {
+                        shutdown = true;
+                        break;
+                    }
+                    mPlayPos = pos;
+                    stop(false);
+                    mPlayPos = pos;
+                    updateCursor(mPlaylist.get(mPlayPos).mId);
+                } else {
+                    mOpenFailedCounter = 0;
+                    Log.w(TAG, "Failed to open file for playback");
+                    shutdown = true;
+                    break;
+                }*/
+                }
+
+                if (shutdown) {
+                    //scheduleDelayedShutdown();
+                    if (mIsSupposedToBePlaying) {
+                        mIsSupposedToBePlaying = false;
+                        notifyChange(PLAYSTATE_CHANGED);
+                    }
+                } else if (openNext) {
+                    //setNextTrack();
+                }
+            }
+        }
+    }
+    private synchronized void closeCursor() {
+        if (mCursor != null) {
+            mCursor.close();
+            mCursor = null;
+        }
+        if (mAlbumCursor != null) {
+            mAlbumCursor.close();
+            mAlbumCursor = null;
+        }
+    }
+    private void updateCursor(final long trackId) {
+        updateCursor("_id=" + trackId, null);
+    }
+    private void updateCursor(final String selection, final String[] selectionArgs) {
+        synchronized (this) {
+            closeCursor();
+            mCursor = openCursorAndGoToFirst(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    PROJECTION, selection, selectionArgs);
+        }
+        updateAlbumCursor();
+    }
+
+    private void updateCursor(final Uri uri) {
+        synchronized (this) {
+            closeCursor();
+            mCursor = openCursorAndGoToFirst(uri, PROJECTION, null, null);
+        }
+        updateAlbumCursor();
+    }
+    private void updateAlbumCursor() {
+        long albumId = getAlbumId();
+        if (albumId >= 0) {
+            mAlbumCursor = openCursorAndGoToFirst(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    ALBUM_PROJECTION, "_id=" + albumId, null);
+        } else {
+            mAlbumCursor = null;
+        }
+    }
+
+    private Cursor openCursorAndGoToFirst(Uri uri, String[] projection,
+                                          String selection, String[] selectionArgs) {
+        Cursor c = getContentResolver().query(uri, projection,
+                selection, selectionArgs, null);
+        if (c == null) {
+            return null;
+        }
+        if (!c.moveToFirst()) {
+            c.close();
+            return null;
+        }
+        return c;
+    }
+
+    private void stop(final boolean goToIdle) {
+        long duration = this.duration();
+        long position = this.position();
+        if (duration > 30000 && (position >= duration / 2) || position > 240000) {
+            //scrobble();
+        }
+
+        if (mPlayer.isInitialized()) {
+            mPlayer.stop();
+        }
+        //mFileToPlay = null;
+        closeCursor();
+        if (goToIdle) {
+            //setIsSupposedToBePlaying(false, false);
+        } else {
+            if (MiCoreApplication.isLollipop())
+                stopForeground(false);
+            else stopForeground(true);
+        }
+    }
+
+    private static void notifyChange(String whatChanged) {
+        if(F)
+        {
+        }
+
+    }
+
     private void addToPlayList(final long[] list, int position, long sourceId, MiCoreApplication.IdType sourceType) {
         final int addlen = list.length;
         if (position < 0) {
@@ -283,8 +454,8 @@ public class MusicService extends Service {
         mPlaylist.addAll(position, arrayList);
 
         if (mPlaylist.size() == 0) {
-            closeCursor();
-            notifyChange(META_CHANGED);
+           /* closeCursor();
+            notifyChange(META_CHANGED);*/
         }
     }
     /**
@@ -404,6 +575,168 @@ public class MusicService extends Service {
             return list;
         }
     }
+    /**
+     *
+     * Play Music
+     * */
+    public void play() {
+        play(true);
+    }
+
+    public void play(boolean createNewNextTrack) {
+        int status = mAudioManager.requestAudioFocus(mAudioFocusListener,
+                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+
+        if (status != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            return;
+        }
+
+        final Intent intent = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+        intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, getAudioSessionId());
+        intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+        sendBroadcast(intent);
+
+        mAudioManager.registerMediaButtonEventReceiver(new ComponentName(getPackageName(),
+                MediaButtonIntentReceiver.class.getName()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mSession.setActive(true);
+
+        if (createNewNextTrack) {
+            //setNextTrack();
+        } else {
+            //setNextTrack(mNextPlayPos);
+        }
+
+        if (mPlayer.isInitialized()) {
+            final long duration = mPlayer.duration();
+            /*if (mRepeatMode != REPEAT_CURRENT && duration > 2000
+                    && mPlayer.position() >= duration - 2000) {
+                gotoNext(true);
+            }*/
+
+            mPlayer.start();
+            /*mPlayerHandler.removeMessages(FADEDOWN);
+            mPlayerHandler.sendEmptyMessage(FADEUP);
+
+            setIsSupposedToBePlaying(true, true);
+
+            cancelShutdown();
+            updateNotification();*/
+            notifyChange(META_CHANGED);
+        } else if (mPlaylist.size() <= 0) {
+            //setShuffleMode(SHUFFLE_AUTO);
+        }
+    }
+    public int getAudioSessionId() {
+        synchronized (this) {
+            return mPlayer.getAudioSessionId();
+        }
+    }
+
+
+
+    /**
+     * Open File
+     * */
+    public boolean openFile(final String path) {
+        if (F) Log.d(TAG, "openFile: path = " + path);
+        synchronized (this) {
+            if (path == null) {
+                return false;
+            }
+
+            if (mCursor == null) {
+                Uri uri = Uri.parse(path);
+                boolean shouldAddToPlaylist = true;
+                long id = -1;
+                try {
+                    id = Long.valueOf(uri.getLastPathSegment());
+                } catch (NumberFormatException ex) {
+                    // Ignore
+                }
+
+                if (id != -1 && path.startsWith(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())) {
+                    updateCursor(uri);
+
+                } else if (id != -1 && path.startsWith(
+                        MediaStore.Files.getContentUri("external").toString())) {
+                    updateCursor(id);
+
+                } else if (path.startsWith("content://downloads/")) {
+
+                    String mpUri = getValueForDownloadedFile(this, uri, "mediaprovider_uri");
+                    if (F) Log.i(TAG, "Downloaded file's MP uri : " + mpUri);
+                    if (!TextUtils.isEmpty(mpUri)) {
+                        if (openFile(mpUri)) {
+                            notifyChange(META_CHANGED);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        //updateCursorForDownloadedFile(this, uri);
+                        shouldAddToPlaylist = false;
+                    }
+
+                } else {
+                    String where = MediaStore.Audio.Media.DATA + "=?";
+                    String[] selectionArgs = new String[]{path};
+                    updateCursor(where, selectionArgs);
+                }
+                try {
+                    if (mCursor != null && shouldAddToPlaylist) {
+                        mPlaylist.clear();
+                        mPlaylist.add(new MusicPlaybackTrack(
+                                mCursor.getLong(IDCOLIDX), -1, MiCoreApplication.IdType.NA, -1));
+                        notifyChange(QUEUE_CHANGED);
+                        mPlayPos = 0;
+                        //mHistory.clear();
+                    }
+                } catch (final UnsupportedOperationException ex) {
+                    // Ignore
+                }
+
+            }
+            mFileToPlay = path;
+            mPlayer.setDataSource(mFileToPlay);
+            if (mPlayer.isInitialized()) {
+                mOpenFailedCounter = 0;
+                return true;
+            }
+
+            String trackName = getTrackName();
+            if (TextUtils.isEmpty(trackName)) {
+                trackName = path;
+            }
+            //sendErrorMessage(trackName);
+
+            stop(true);
+            return false;
+        }
+    }
+
+    private String getValueForDownloadedFile(Context context, Uri uri, String column) {
+
+        Cursor cursor = null;
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(0);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
 
 
 

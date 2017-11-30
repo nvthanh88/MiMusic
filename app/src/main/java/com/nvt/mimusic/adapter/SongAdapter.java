@@ -136,7 +136,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            MusicCorePlayer.playAll(mAppContext,songId,getAdapterPosition(),albumID,MiCoreApplication.IdType.Album,false);
+                            MusicCorePlayer.playAll(mAppContext,songId,getAdapterPosition(),-1,MiCoreApplication.IdType.NA,false);
                         }
                     }, 100);
 
