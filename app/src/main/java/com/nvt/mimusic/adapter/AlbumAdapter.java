@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,7 +50,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_album,parent,false);
-
         return new ViewHolder(itemView);
     }
 
@@ -85,7 +85,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
                     }
                 });
 
-        holder.imgOptions.setOnClickListener(new View.OnClickListener() {
+        holder.imgAlbumThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mAppContext,"Album: " + albumModelItem.getAlbumId(),Toast.LENGTH_LONG).show();
@@ -103,7 +103,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         return albumModelList.size();
     }
 
-     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+     class ViewHolder extends RecyclerView.ViewHolder {
          @BindView(R.id.txtAlbumTile)
          TextView txtAlbumTile;
          @BindView(R.id.txtAlbumSongs)
@@ -114,17 +114,25 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
          ImageView imgOptions;
 
          ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-            itemView.setOnClickListener(this);
-        }
-         @Override
-         public void onClick(View v) {
-             Log.i("Adapter", "onClick: ");
-             //Todo load album content
-             Toast.makeText(mAppContext,"Album: " + albumModelList.get(getAdapterPosition()).getAlbumId(),Toast.LENGTH_LONG).show();
-         }
-     }
+             super(itemView);
+             ButterKnife.bind(this, itemView);
+             itemView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Handler handler = new Handler();
+                     handler.postDelayed(new Runnable() {
+                         @Override
+                         public void run() {
+                             //Todo load album content
+                             
+                         }
+                     }, 100);
 
+
+                 }
+             });
+         }
+
+     }
 
 }
