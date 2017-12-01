@@ -2,52 +2,36 @@ package com.nvt.mimusic.core;
 
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-
-import android.content.SharedPreferences;
-import android.database.ContentObserver;
 
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 
 import android.os.Build;
-import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-
-import android.os.PowerManager;
-import android.os.RemoteException;
 
 import android.provider.MediaStore;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nvt.mimusic.MiCoreService;
 
 import com.nvt.mimusic.helper.MediaButtonIntentReceiver;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
 import com.nvt.mimusic.helper.Shuffler;
 
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
@@ -261,7 +245,7 @@ public class MusicService extends Service {
      * Prepare Data to play
      *
      * */
-    public void prepareData(final long[] list, final int position, long sourceId, MiCoreApplication.IdType sourceType) {
+    public void prepareData(final long[] list, final int position, long sourceId, MiApplication.IdType sourceType) {
         synchronized (this) {
             if (mShuffleMode == SHUFFLE_AUTO) {
                 mShuffleMode = SHUFFLE_NORMAL;
@@ -421,7 +405,7 @@ public class MusicService extends Service {
         if (goToIdle) {
             //setIsSupposedToBePlaying(false, false);
         } else {
-            if (MiCoreApplication.isLollipop())
+            if (MiApplication.isLollipop())
                 stopForeground(false);
             else stopForeground(true);
         }
@@ -434,7 +418,7 @@ public class MusicService extends Service {
 
     }
 
-    private void addToPlayList(final long[] list, int position, long sourceId, MiCoreApplication.IdType sourceType) {
+    private void addToPlayList(final long[] list, int position, long sourceId, MiApplication.IdType sourceType) {
         final int addlen = list.length;
         if (position < 0) {
             mPlaylist.clear();
@@ -479,7 +463,7 @@ public class MusicService extends Service {
         {
             Bitmap albumArt = null;
             if (mShowAlbumArtOnLockscreen) {
-                albumArt = ImageLoader.getInstance().loadImageSync(MiCoreApplication.getAlbumArtUri(getAlbumId()).toString());
+                albumArt = ImageLoader.getInstance().loadImageSync(MiApplication.getAlbumArtUri(getAlbumId()).toString());
                 if (albumArt != null) {
 
                     Bitmap.Config config = albumArt.getConfig();
@@ -689,7 +673,7 @@ public class MusicService extends Service {
                     if (mCursor != null && shouldAddToPlaylist) {
                         mPlaylist.clear();
                         mPlaylist.add(new MusicPlaybackTrack(
-                                mCursor.getLong(IDCOLIDX), -1, MiCoreApplication.IdType.NA, -1));
+                                mCursor.getLong(IDCOLIDX), -1, MiApplication.IdType.NA, -1));
                         notifyChange(QUEUE_CHANGED);
                         mPlayPos = 0;
                         //mHistory.clear();

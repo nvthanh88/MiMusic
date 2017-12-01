@@ -1,17 +1,10 @@
 package com.nvt.mimusic.adapter;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,11 +15,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nvt.mimusic.core.MiCoreApplication;
+import com.nvt.mimusic.core.MiApplication;
 
-import com.nvt.mimusic.model.AlbumModel;
+import com.nvt.mimusic.model.Album;
 
-import java.io.IOException;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,11 +29,11 @@ import com.nvt.mimusic.R;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
 
-    List<AlbumModel> albumModelList ;
+    List<Album> albumList;
     Context mAppContext;
 
-    public AlbumAdapter(List<AlbumModel> albumModelList, Context mAppContext) {
-        this.albumModelList = albumModelList;
+    public AlbumAdapter(List<Album> albumList, Context mAppContext) {
+        this.albumList = albumList;
         this.mAppContext = mAppContext;
 
     }
@@ -55,13 +47,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final AlbumModel albumModelItem = albumModelList.get(position);
-        holder.txtAlbumTile.setText(albumModelItem.getName());
-        holder.txtAlbumSongs.setText(String.valueOf(albumModelItem.getNumberOfSongs()) + " songs");
+        final Album albumItem = albumList.get(position);
+        holder.txtAlbumTile.setText(albumItem.getName());
+        holder.txtAlbumSongs.setText(String.valueOf(albumItem.getNumberOfSongs()) + " songs");
 
         //Set album thumbnail
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
-        ImageLoader.getInstance().displayImage(MiCoreApplication.getAlbumUri(albumModelItem.getAlbumId()).toString(),holder.imgAlbumThumbnail
+        ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(albumItem.getAlbumId()).toString(),holder.imgAlbumThumbnail
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)
                         .showImageOnFail(R.drawable.album1)
                         .resetViewBeforeLoading(true)
@@ -88,7 +80,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         holder.imgAlbumThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mAppContext,"Album: " + albumModelItem.getAlbumId(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mAppContext,"Open Album : " + albumItem.getAlbumId(),Toast.LENGTH_LONG).show();
 
 
             }
@@ -100,7 +92,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return albumModelList.size();
+        return albumList.size();
     }
 
      class ViewHolder extends RecyclerView.ViewHolder {
@@ -124,7 +116,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
                          @Override
                          public void run() {
                              //Todo load album content
-                             
+
                          }
                      }, 100);
 

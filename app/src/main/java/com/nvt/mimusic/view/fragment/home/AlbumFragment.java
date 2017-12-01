@@ -11,7 +11,7 @@ import com.nvt.mimusic.adapter.AlbumAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.loader.AlbumDataLoader;
 import com.nvt.mimusic.helper.GridSpacingItemDecoration;
-import com.nvt.mimusic.model.AlbumModel;
+import com.nvt.mimusic.model.Album;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import butterknife.BindView;
  */
 
 public class AlbumFragment extends MiBaseFragment {
-    private List<AlbumModel> albumModelList ;
+    private List<Album> albumList;
     private AlbumAdapter mAlbumAdapter;
     @BindView(R.id.albumRecycleView)
     RecyclerView albumRecycleView;
@@ -47,7 +47,7 @@ public class AlbumFragment extends MiBaseFragment {
     @Override
     protected void initControls() {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mAppContext,2);
-        albumModelList = new ArrayList<>();
+        albumList = new ArrayList<>();
         mAlbumAdapter = new AlbumAdapter(AlbumDataLoader.getAllAlbum(mAppContext),mAppContext);
         albumRecycleView.setLayoutManager(layoutManager);
         albumRecycleView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10 ), true));

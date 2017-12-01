@@ -4,7 +4,7 @@ package com.nvt.mimusic.model;
  * Created by Admin on 10/19/17.
  */
 
-public class SongModel {
+public class Song {
     private String name;
     private long songId;
     private String artistName;
@@ -69,11 +69,11 @@ public class SongModel {
         this.albumId = albumId;
     }
 
-    public SongModel() {
+    public Song() {
 
     }
 
-    public SongModel(String name, long songId, String artistName, long artisId, String albumName, long albumId ,int trackNumber) {
+    public Song(String name, long songId, String artistName, long artisId, String albumName, long albumId , int trackNumber) {
 
         this.name = name;
         this.songId = songId;

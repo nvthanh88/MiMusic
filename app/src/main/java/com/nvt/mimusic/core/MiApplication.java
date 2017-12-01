@@ -9,12 +9,12 @@ import android.os.Build;
  * Created by Admin on 10/18/17.
  */
 
-public class MiCoreApplication extends Application {
-    public static MiCoreApplication mInstance;
-    public static final MiCoreApplication getInstance(){
+public class MiApplication extends Application {
+    public static MiApplication mInstance;
+    public static final MiApplication getInstance(){
         if (mInstance == null)
         {
-            mInstance = new MiCoreApplication();
+            mInstance = new MiApplication();
         }
         return mInstance;
     }

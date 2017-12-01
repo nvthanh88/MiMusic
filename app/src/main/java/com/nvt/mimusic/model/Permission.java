@@ -9,17 +9,17 @@ import java.util.Random;
  * Created by Admin on 11/16/17.
  */
 
-public class PermissionModel {
+public class Permission {
     private  Random random;
     private  int requestCode;
     private PermissionCallback permissionCallback;
     private ArrayList<String> permissions;
 
-    public PermissionModel(int requestCode) {
+    public Permission(int requestCode) {
         this.requestCode = requestCode;
     }
 
-    public PermissionModel(ArrayList<String> permissions,  PermissionCallback permissionCallback) {
+    public Permission(ArrayList<String> permissions, PermissionCallback permissionCallback) {
         this.permissions = permissions;
         if (random == null)
             random = new Random();
@@ -42,8 +42,8 @@ public class PermissionModel {
         if (object == null) {
             return false;
         }
-        if (object instanceof PermissionModel) {
-            return ((PermissionModel) object).requestCode == this.requestCode;
+        if (object instanceof Permission) {
+            return ((Permission) object).requestCode == this.requestCode;
         }
         return false;
     }

@@ -1,14 +1,8 @@
 package com.nvt.mimusic.adapter;
 
 import android.app.Activity;
-import android.content.ContentUris;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +16,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.core.MiCoreApplication;
-import com.nvt.mimusic.core.MusicCorePlayer;
-import com.nvt.mimusic.model.SongModel;
-import com.nvt.mimusic.view.activity.MiMainActivity;
+import com.nvt.mimusic.core.MiApplication;
+import com.nvt.mimusic.core.MusicPlayer;
+import com.nvt.mimusic.model.Song;
 import com.nvt.mimusic.wiget.CircleImageView;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,15 +31,15 @@ import butterknife.ButterKnife;
  */
 
 public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
-    List<SongModel> songModelList ;
+    List<Song> songList;
     Activity mAppContext;
     private long albumID;
     private long[] songId;
 
 
 
-    public SongAdapter(List<SongModel> songModelList, Activity mAppContext, long albumID) {
-        this.songModelList = songModelList;
+    public SongAdapter(List<Song> songList, Activity mAppContext, long albumID) {
+        this.songList = songList;
         this.mAppContext = mAppContext;
         this.albumID = albumID;
         this.songId=getSongId();
@@ -57,7 +49,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     private long[] getSongId() {
         long[] ret = new long[getItemCount()];
         for (int i = 0; i < getItemCount(); i++) {
-            ret[i] = songModelList.get(i).getSongId();
+            ret[i] = songList.get(i).getSongId();
         }
 
         return ret;
@@ -73,12 +65,12 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final SongModel songModelItem = songModelList.get(position);
-        holder.txtSongTile.setText(songModelItem.getName());
-        holder.txtArtistName.setText(songModelItem.getArtistName());
+        final Song songItem = songList.get(position);
+        holder.txtSongTile.setText(songItem.getName());
+        holder.txtArtistName.setText(songItem.getArtistName());
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
-        ImageLoader.getInstance().displayImage(MiCoreApplication.getAlbumUri(songModelItem.getAlbumId()).toString(),holder.imgSongThumbnail
+        ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(songItem.getAlbumId()).toString(),holder.imgSongThumbnail
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)
                         .showImageOnFail(R.drawable.album1)
                         .resetViewBeforeLoading(true)
@@ -113,7 +105,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return songModelList.size();
+        return songList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -136,7 +128,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            MusicCorePlayer.playAll(mAppContext,songId,getAdapterPosition(),-1,MiCoreApplication.IdType.NA,false);
+                            MusicPlayer.playAll(mAppContext,songId,getAdapterPosition(),-1, MiApplication.IdType.NA,false);
                         }
                     }, 100);
 

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nvt.mimusic.core.MiCoreApplication;
+import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
 
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class MusicPlaybackState {
 
                 do {
                     results.add(new MusicPlaybackTrack(cursor.getLong(0), cursor.getLong(1),
-                            MiCoreApplication.IdType.getTypeById(cursor.getInt(2)), cursor.getInt(3)));
+                            MiApplication.IdType.getTypeById(cursor.getInt(2)), cursor.getInt(3)));
                 } while (cursor.moveToNext());
             }
 

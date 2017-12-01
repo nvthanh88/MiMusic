@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 
-import com.nvt.mimusic.model.PermissionModel;
-import com.nvt.mimusic.view.activity.MiMainActivity;
+import com.nvt.mimusic.model.Permission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +20,7 @@ import java.util.Set;
 
 public class PermissionRequest {
     private static final String TAG = PermissionRequest.class.getSimpleName();
-    private static ArrayList<PermissionModel> permissionRequests = new ArrayList<PermissionModel>();
+    private static ArrayList<Permission> permissionRequests = new ArrayList<Permission>();
     private static Context mContext;
     private static SharedPreferences sharedPreferences;
     private static final String KEY_PREV_PERMISSIONS = "previous_permissions";
@@ -52,7 +49,7 @@ public class PermissionRequest {
             permissionCallback.permissionGranted();
             return;
         }
-        PermissionModel permissionModel = new PermissionModel(new ArrayList<>(Arrays.asList(permissions)), permissionCallback);
+        Permission permissionModel = new Permission(new ArrayList<>(Arrays.asList(permissions)), permissionCallback);
         permissionRequests.add(permissionModel);
 
         activity.requestPermissions(permissions, permissionModel.getRequestCode());
@@ -77,9 +74,9 @@ public class PermissionRequest {
         return true;
     }
     public static void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        PermissionModel requestResult = new PermissionModel(requestCode);
+        Permission requestResult = new Permission(requestCode);
         if (permissionRequests.contains(requestResult)) {
-            PermissionModel permissionModel = permissionRequests.get(permissionRequests.indexOf(requestResult));
+            Permission permissionModel = permissionRequests.get(permissionRequests.indexOf(requestResult));
             if (verifyPermissions(grantResults)) {
                 //Permission has been granted
                 permissionModel.getPermissionCallback().permissionGranted();

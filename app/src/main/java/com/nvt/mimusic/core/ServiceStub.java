@@ -1,10 +1,7 @@
 package com.nvt.mimusic.core;
 
-import android.database.ContentObserver;
-import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.nvt.mimusic.MiCoreService;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
@@ -30,7 +27,7 @@ public class ServiceStub extends MiCoreService.Stub {
     @Override
     public void prepareData(long[] list, int position, long sourceId, int sourceType) throws RemoteException {
         Log.i(TAG, "prepareData: " + list + position + sourceId + sourceType);
-        mService.get().prepareData(list, position, sourceId, MiCoreApplication.IdType.getTypeById(sourceType));
+        mService.get().prepareData(list, position, sourceId, MiApplication.IdType.getTypeById(sourceType));
 
     }
 

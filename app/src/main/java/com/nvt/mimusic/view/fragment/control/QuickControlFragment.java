@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -22,18 +20,15 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.core.MiCoreApplication;
-import com.nvt.mimusic.core.MusicCorePlayer;
+import com.nvt.mimusic.core.MiApplication;
+import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.listener.MediaStateListener;
 import com.nvt.mimusic.utils.ImageUtils;
 import com.nvt.mimusic.view.activity.MiBaseActivity;
 import com.nvt.mimusic.wiget.PlayPauseButton;
 
-import net.steamcrafted.materialiconlib.MaterialIconView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Admin on 11/22/17.
@@ -65,10 +60,10 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
     public Runnable mUpdateProgress = new Runnable() {
         @Override
         public void run() {
-            long position = MusicCorePlayer.position();
+            long position = MusicPlayer.position();
             songProgressbar.setProgress((int) position);
             overflowCounter --;
-            if (MusicCorePlayer.isPlaying());
+            if (MusicPlayer.isPlaying());
             {
                 int delay = (int) (1500 - (position % 1000));
                 if (overflowCounter < 0 && !fragmentPaused) {
@@ -128,11 +123,11 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
      * Update Playing card on load
      * */
     public void updateNowPlayingCard(){
-        qcSongTitle.setText(MusicCorePlayer.getTrackName());
-        qcArtist.setText(MusicCorePlayer.getArtistName());
+        qcSongTitle.setText(MusicPlayer.getTrackName());
+        qcArtist.setText(MusicPlayer.getArtistName());
         if (!duetoplaypause) {
             ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
-            ImageLoader.getInstance().displayImage(MiCoreApplication.getAlbumUri(MusicCorePlayer.getCurrentAlbumId()).toString(), qcAlbumArt,
+            ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(MusicPlayer.getCurrentAlbumId()).toString(), qcAlbumArt,
                     new DisplayImageOptions.Builder().cacheInMemory(true)
                             .showImageOnFail(R.drawable.album1)
                             .resetViewBeforeLoading(true)
@@ -163,7 +158,7 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
                     });
         }
         duetoplaypause = false;
-        songProgressbar.setMax((int) MusicCorePlayer.duration());
+        songProgressbar.setMax((int) MusicPlayer.duration());
         songProgressbar.postDelayed(mUpdateProgress, 10);
 
     }
@@ -171,7 +166,7 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
      * Update Media State
      * */
     public void updateMediaState(){
-        if (MusicCorePlayer.isPlaying()) {
+        if (MusicPlayer.isPlaying()) {
             if (!btnPlayPause.isPlayed()) {
                 btnPlayPause.setPlayed(true);
                 btnPlayPause.startAnimation();

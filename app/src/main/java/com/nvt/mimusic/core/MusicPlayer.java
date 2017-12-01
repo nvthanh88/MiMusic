@@ -8,12 +8,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nvt.mimusic.MiCoreService;
-import com.nvt.mimusic.core.MiCoreApplication.IdType;
+import com.nvt.mimusic.core.MiApplication.IdType;
 import java.util.Arrays;
 import java.util.WeakHashMap;
 
@@ -21,7 +18,7 @@ import java.util.WeakHashMap;
  * Created by Admin on 10/25/17.
  */
 
-public class MusicCorePlayer {
+public class MusicPlayer {
     private static final long[] sEmptyList;
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
     public static MiCoreService mMiCoreService = null;

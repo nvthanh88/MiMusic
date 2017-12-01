@@ -3,26 +3,23 @@ package com.nvt.mimusic.view.activity;
 import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
+
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
-import com.nvt.mimusic.core.MiCoreApplication;
+import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.utils.PermissionCallback;
 import com.nvt.mimusic.utils.PermissionRequest;
 
-import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
 import com.nvt.mimusic.view.fragment.home.AlbumFragment;
 import com.nvt.mimusic.view.fragment.home.SongFragment;
 import com.nvt.mimusic.view.panel.SlidingUpPanelLayout;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,7 +32,7 @@ public class MiMainActivity extends MiBaseActivity {
     private Context context;
     private ScreenIDs.ID mCurrentTab;
     private MiBaseFragment mCurrentFragment;
-    /*@BindView(R.id.slidingLayout)
+   /* @BindView(R.id.slidingLayout)
     SlidingUpPanelLayout panelLayout;*/
     @BindView(R.id.toolbarTop)
     Toolbar toolbarTop;
@@ -52,7 +49,7 @@ public class MiMainActivity extends MiBaseActivity {
          * Check OS Version > 6 ask for permission and else Todo smt
          * */
         //setupSlidePanel(panelLayout);
-        if (MiCoreApplication.isMarshmallow())
+        if (MiApplication.isMarshmallow())
         {
             checkPermissionAndThenLoad();
         }else {

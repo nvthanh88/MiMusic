@@ -19,7 +19,7 @@ package com.nvt.mimusic.helper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.nvt.mimusic.core.MiCoreApplication.IdType;
+import com.nvt.mimusic.core.MiApplication.IdType;
 
 /**
  * This is used by the music playback service to track the music tracks it is playing

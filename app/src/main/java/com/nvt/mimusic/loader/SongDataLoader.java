@@ -5,11 +5,10 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.nvt.mimusic.model.SongModel;
+import com.nvt.mimusic.model.Song;
 import com.nvt.mimusic.utils.PreferencesUtility;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Admin on 10/19/17.
@@ -17,12 +16,12 @@ import java.util.List;
 
 public class SongDataLoader {
     private static final long[] sEmptyList = new long[0];
-    public static ArrayList<SongModel> getSongListForCursor(Cursor cursor){
+    public static ArrayList<Song> getSongListForCursor(Cursor cursor){
         ArrayList arrayList = new ArrayList();
         if (cursor != null && cursor.moveToFirst())
         do
         {
-            arrayList.add(new SongModel(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6)));
+            arrayList.add(new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6)));
         }
         while (cursor.moveToNext());
         if (cursor != null)
@@ -32,18 +31,18 @@ public class SongDataLoader {
         return arrayList;
 
     }
-    public static SongModel getSongForCursor(Cursor cursor)
+    public static Song getSongForCursor(Cursor cursor)
     {
-        SongModel songModel = new SongModel();
+        Song song = new Song();
         if (cursor != null && cursor.moveToFirst())
         {
-            songModel = new SongModel(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6));
+            song = new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6));
         }
         if (cursor != null)
             cursor.close();
-        return songModel;
+        return song;
     }
-    public static ArrayList<SongModel> getAllSongs(Context context) {
+    public static ArrayList<Song> getAllSongs(Context context) {
         return getSongListForCursor(makeSongCursor(context, null, null));
     }
     public static Cursor makeSongCursor(Context context, String selection, String[] paramArrayOfString) {

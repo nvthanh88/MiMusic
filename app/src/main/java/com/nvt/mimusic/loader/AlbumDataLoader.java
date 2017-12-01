@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.nvt.mimusic.model.AlbumModel;
+import com.nvt.mimusic.model.Album;
 import com.nvt.mimusic.utils.PreferencesUtility;
 
 import java.util.ArrayList;
@@ -15,25 +15,25 @@ import java.util.List;
  */
 
 public class AlbumDataLoader {
-    public AlbumModel getAlbum (Cursor cursor){
-        AlbumModel albumModel = new AlbumModel();
+    public Album getAlbum (Cursor cursor){
+        Album album = new Album();
         if (cursor != null)
         {
             if ( cursor.moveToFirst())
             {
-                albumModel = new AlbumModel(cursor.getLong(0), cursor.getString(1) , cursor.getString(2),cursor.getLong(3), cursor.getInt(4));
+                album = new Album(cursor.getLong(0), cursor.getString(1) , cursor.getString(2),cursor.getLong(3), cursor.getInt(4));
             }
         }
         if (cursor !=null)
             cursor.close();
-        return albumModel;
+        return album;
     }
-    public static List <AlbumModel> getAllAlbumForCursor(Cursor cursor){
+    public static List <Album> getAllAlbumForCursor(Cursor cursor){
         ArrayList arrayList = new ArrayList();
         if (cursor != null && cursor.moveToFirst())
 
         do{
-            arrayList.add(new AlbumModel(cursor.getLong(0), cursor.getString(1) , cursor.getString(2),cursor.getLong(3), cursor.getInt(4)));
+            arrayList.add(new Album(cursor.getLong(0), cursor.getString(1) , cursor.getString(2),cursor.getLong(3), cursor.getInt(4)));
         }
         while (cursor.moveToNext());
         if (cursor != null)
@@ -41,7 +41,7 @@ public class AlbumDataLoader {
 
         return arrayList;
     }
-    public static List<AlbumModel> getAllAlbum(Context context ){
+    public static List<Album> getAllAlbum(Context context ){
         return getAllAlbumForCursor(makeAlbumCursor(context,null,null));
     }
     public static Cursor makeAlbumCursor(Context context , String selection , String[] paramArrayOfString)

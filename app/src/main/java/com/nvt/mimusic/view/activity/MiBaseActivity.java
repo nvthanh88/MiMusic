@@ -15,7 +15,7 @@ import android.view.View;
 
 import com.nvt.mimusic.MiCoreService;
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.core.MusicCorePlayer;
+import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.core.MusicService;
 import com.nvt.mimusic.listener.MediaStateListener;
 import com.nvt.mimusic.utils.PlayBackStatus;
@@ -24,12 +24,12 @@ import com.nvt.mimusic.view.panel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 
-import static com.nvt.mimusic.core.MusicCorePlayer.mMiCoreService;
+import static com.nvt.mimusic.core.MusicPlayer.mMiCoreService;
 
 public class MiBaseActivity extends AppCompatActivity implements ServiceConnection,MediaStateListener{
     private String TAG = getClass().getSimpleName();
     private PlayBackStatus mPlayBackStatus;
-    private MusicCorePlayer.ServiceToken mToken;
+    private MusicPlayer.ServiceToken mToken;
     private ArrayList<MediaStateListener> mediaStateListenerArrayList = new ArrayList<>();
 
 
@@ -41,7 +41,7 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
         super.onCreate(savedInstanceState);
         mPlayBackStatus = new PlayBackStatus(this);
         //Bound Service
-        mToken = MusicCorePlayer.bindToService(this,this);
+        mToken = MusicPlayer.bindToService(this,this);
                 //make volume keys change multimedia volume even if music is not playing now
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -83,7 +83,7 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         if (mToken != null) {
-            MusicCorePlayer.unbindFromService(mToken);
+            MusicPlayer.unbindFromService(mToken);
             mToken = null;
         }
         try{

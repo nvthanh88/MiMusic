@@ -4,7 +4,7 @@ package com.nvt.mimusic.model;
  * Created by Admin on 10/16/17.
  */
 
-public class AlbumModel {
+public class Album {
     private long albumId;
     private String name;
     private String artistName;
@@ -15,7 +15,7 @@ public class AlbumModel {
         return albumId;
     }
 
-    public AlbumModel() {
+    public Album() {
     }
 
     public void setAlbumId(long albumId) {
@@ -54,7 +54,7 @@ public class AlbumModel {
         this.numberOfSongs = numberOfSongs;
     }
 
-    public AlbumModel(long albumId, String name, String artistName, long artistId, int numberOfSongs) {
+    public Album(long albumId, String name, String artistName, long artistId, int numberOfSongs) {
 
         this.albumId = albumId;
         this.name = name;
