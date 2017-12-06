@@ -5,6 +5,9 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.os.Build;
 
+import com.nvt.mimusic.R;
+import com.nvt.mimusic.wiget.PlayPauseButton;
+
 /**
  * Created by Admin on 10/18/17.
  */
@@ -70,6 +73,7 @@ public class MiApplication extends Application {
     public static Uri getAlbumArtUri(long albumId) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);
     }
+
 
 
 

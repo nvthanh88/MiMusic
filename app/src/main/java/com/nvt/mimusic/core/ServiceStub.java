@@ -82,7 +82,7 @@ public class ServiceStub extends MiCoreService.Stub {
 
     @Override
     public boolean isPlaying() throws RemoteException {
-        return false;
+        return mService.get().isPlaying();
     }
 
     @Override

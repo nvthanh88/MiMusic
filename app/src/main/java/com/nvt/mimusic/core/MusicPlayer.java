@@ -43,12 +43,13 @@ public class MusicPlayer {
      * Check Music player is playing
      * */
     public static final boolean isPlaying(){
-        if(mMiCoreService != null)
+        if(mMiCoreService != null) {
             try {
-                return  mMiCoreService.isPlaying();
+                return mMiCoreService.isPlaying();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+        }
             return false;
     }
 

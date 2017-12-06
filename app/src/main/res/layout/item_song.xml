@@ -2,11 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    style="@style/Layout.FullWidth">
+    style="@style/Layout.FullWidth"
+    android:background="@color/cmn_white">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_view_height"
-        android:layout_margin="@dimen/padding_small"
+        android:layout_margin="@dimen/padding_smaller"
         android:elevation="3dp"
         app:cardCornerRadius="@dimen/padding_smaller">
         <RelativeLayout
@@ -28,6 +29,7 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/padding_huger"
                 >
                 <TextView
@@ -36,14 +38,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/txtSongTileText"
                     android:textSize="@dimen/text_small"
+                    android:textStyle="bold"
+                    android:textColor="@color/cmn_black"
                     />
                 <TextView
                     android:id="@+id/txtArtistName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/txtArtist"
-
                     android:textSize="@dimen/text_smaller"
                     />
             </LinearLayout>

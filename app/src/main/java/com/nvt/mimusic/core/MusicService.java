@@ -274,7 +274,7 @@ public class MusicService extends Service {
             //mHistory.clear();
             openCurrentAndNext();
             if (oldId != getAudioId()) {
-                //notifyChange(META_CHANGED);
+                notifyChange(META_CHANGED);
             }
         }
 
@@ -411,10 +411,18 @@ public class MusicService extends Service {
         }
     }
 
-    private static void notifyChange(String whatChanged) {
-        if(F)
-        {
-        }
+    private  void notifyChange(String whatChanged) {
+
+
+            final Intent intent = new Intent(whatChanged);
+            intent.putExtra("id", getAudioId());
+            intent.putExtra("artist", getArtistName());
+            intent.putExtra("album", getAlbumName());
+            intent.putExtra("albumid", getAlbumId());
+            intent.putExtra("track", getTrackName());
+            intent.putExtra("playing", isPlaying());
+
+            sendStickyBroadcast(intent);
 
     }
 
@@ -600,6 +608,7 @@ public class MusicService extends Service {
             }*/
 
             mPlayer.start();
+            mIsSupposedToBePlaying = true;
             /*mPlayerHandler.removeMessages(FADEDOWN);
             mPlayerHandler.sendEmptyMessage(FADEUP);
 
@@ -721,8 +730,11 @@ public class MusicService extends Service {
         return null;
     }
 
-
-
-
+    /**
+     * Check music Player is play or not
+     * */
+    public boolean isPlaying() {
+        return mIsSupposedToBePlaying;
+    }
 
 }

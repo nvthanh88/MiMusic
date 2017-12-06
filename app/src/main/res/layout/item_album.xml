@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    style="@style/Layout.FullWidth"    >
+    style="@style/Layout.FullWidth"
+    android:background="@color/cmn_white">
     <android.support.v7.widget.CardView
         android:id="@+id/albumCardView"
         android:layout_width="match_parent"
@@ -10,10 +11,12 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/padding_small"
         android:elevation="3dp"
-        app:cardCornerRadius="@dimen/padding_smaller">
+        app:cardCornerRadius="@dimen/padding_smaller"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:id="@+id/imgAlbumThumbnail"
@@ -28,7 +31,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imgAlbumThumbnail"
-                android:textSize="@dimen/text_small"/>
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold"
+                android:textColor="@color/cmn_gray"/>
 
             <TextView
                 android:id="@+id/txtAlbumSongs"
@@ -38,16 +43,7 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/text_smaller"/>
 
-            <ImageView
-                android:id="@+id/imgOptions"
-                android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:src="@mipmap/ic_album_options"
-                android:layout_below="@+id/imgAlbumThumbnail"
-                android:scaleType="centerCrop"
-                android:layout_alignParentRight="true"
-                android:clickable="true"
-                />
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

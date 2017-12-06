@@ -2,23 +2,36 @@ package com.nvt.mimusic.view.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
 import com.nvt.mimusic.core.MiApplication;
+import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.utils.PermissionCallback;
 import com.nvt.mimusic.utils.PermissionRequest;
-
+import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
 import com.nvt.mimusic.view.fragment.home.AlbumFragment;
 import com.nvt.mimusic.view.fragment.home.SongFragment;
-import com.nvt.mimusic.view.panel.SlidingUpPanelLayout;
+import com.nvt.mimusic.wiget.PlayPauseButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,10 +45,25 @@ public class MiMainActivity extends MiBaseActivity {
     private Context context;
     private ScreenIDs.ID mCurrentTab;
     private MiBaseFragment mCurrentFragment;
-   /* @BindView(R.id.slidingLayout)
-    SlidingUpPanelLayout panelLayout;*/
+    boolean duetoplaypause;
+    int overflowCounter = 0;
     @BindView(R.id.toolbarTop)
     Toolbar toolbarTop;
+    @BindView(R.id.btnPlayPause)
+    PlayPauseButton mPlayPauseButton;
+    @BindView(R.id.qcSongTitle)
+    TextView qcSongTitle;
+    @BindView(R.id.qcArtist)
+    TextView qcArtist;
+    @BindView(R.id.qcAlbumArt)
+    ImageView qcAlbumArt;
+    @BindView(R.id.qcSongProgressbar)
+    ProgressBar qcSongProgressbar;
+    @BindView(R.id.quickPlayingControl)
+    RelativeLayout quickPlayingControl;
+
+
+
 
 
     @Override
@@ -48,18 +76,15 @@ public class MiMainActivity extends MiBaseActivity {
         /**
          * Check OS Version > 6 ask for permission and else Todo smt
          * */
-        //setupSlidePanel(panelLayout);
         if (MiApplication.isMarshmallow())
         {
             checkPermissionAndThenLoad();
         }else {
             gotoHomeFragment.run();
-            //new initQuickControls().execute("");
         }
         /**
          * Setup palnel
          * */
-
 
 
     }
@@ -71,7 +96,6 @@ public class MiMainActivity extends MiBaseActivity {
         //check for permission
         if (PermissionRequest.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             gotoHomeFragment.run();
-            //new initQuickControls().execute("");
         } else {
             if (PermissionRequest.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 /*Snackbar.make(panelLayout, "MiMusic Need READ_EXTERNAL_STORAGE Permission to load  media", Snackbar.LENGTH_LONG)
@@ -90,7 +114,6 @@ public class MiMainActivity extends MiBaseActivity {
         @Override
         public void permissionGranted() {
             gotoHomeFragment.run();
-            //new initQuickControls().execute("");
         }
 
         @Override
@@ -142,6 +165,92 @@ public class MiMainActivity extends MiBaseActivity {
         }
 
     }
+    @Override
+    public void onMetaChanged() {
+        showPlayingControl(true);
+        updateState();
+        updateNowPlayingCard();
+    }
+
+    /**
+     * Update now playing card
+     * */
+    public void updateState(){
+        if(MusicPlayer.isPlaying()) {
+            if (!mPlayPauseButton.isPlayed()) {
+                mPlayPauseButton.setPlayed(true);
+                mPlayPauseButton.setColor(R.color.colorAccent);
+                mPlayPauseButton.startAnimation();
+            }
+
+            }else {
+            mPlayPauseButton.setPlayed(false);
+            mPlayPauseButton.setColor(R.color.colorAccent);
+            mPlayPauseButton.startAnimation();
+        }
+    }
+    public void updateNowPlayingCard(){
+        qcSongTitle.setText(MusicPlayer.getTrackName());
+        qcArtist.setText(MusicPlayer.getArtistName());
+        if (!duetoplaypause) {
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
+            ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(MusicPlayer.getCurrentAlbumId()).toString(), qcAlbumArt,
+                    new DisplayImageOptions.Builder().cacheInMemory(true)
+                            .showImageOnFail(R.drawable.album1)
+                            .resetViewBeforeLoading(true)
+                            .build(), new ImageLoadingListener() {
+                        @Override
+                        public void onLoadingStarted(String imageUri, View view) {
+
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            Bitmap failedBitmap = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.album1);
+
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
 
+                        }
+
+                        @Override
+                        public void onLoadingCancelled(String imageUri, View view) {
+
+                        }
+                    });
+        }
+        duetoplaypause = false;
+        qcSongProgressbar.setMax((int) MusicPlayer.duration());
+        qcSongProgressbar.postDelayed(mUpdateProgress, 10);
+    }
+    /**
+     *
+     * Update Progressbar when playing music
+     * */
+    public Runnable mUpdateProgress = new Runnable() {
+        @Override
+        public void run() {
+            long position = MusicPlayer.position();
+            qcSongProgressbar.setProgress((int) position);
+            overflowCounter --;
+            if (MusicPlayer.isPlaying());
+            {
+                int delay = (int) (1500 - (position % 1000));
+                if (overflowCounter < 0 ) {
+                    overflowCounter++;
+                    qcSongProgressbar.postDelayed(mUpdateProgress, delay);
+                } else {
+                    qcSongProgressbar.removeCallbacks(this);
+                }
+            }
+
+        }
+    };
+    public void showPlayingControl(Boolean isShow)
+    {
+        quickPlayingControl.setVisibility(isShow ? View.VISIBLE:View.GONE);
+    }
 }

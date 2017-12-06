@@ -35,8 +35,8 @@ import butterknife.ButterKnife;
  */
 
 public class QuickControlFragment extends Fragment implements MediaStateListener{
-    @BindView(R.id.songProgressbar)
-    ProgressBar songProgressbar;
+    @BindView(R.id.qcSongProgressbar)
+    ProgressBar qcSongProgressbar;
     @BindView(R.id.btnPlayPause)
     PlayPauseButton btnPlayPause;
     @BindView(R.id.qcAlbumArt)
@@ -61,16 +61,16 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
         @Override
         public void run() {
             long position = MusicPlayer.position();
-            songProgressbar.setProgress((int) position);
+            qcSongProgressbar.setProgress((int) position);
             overflowCounter --;
             if (MusicPlayer.isPlaying());
             {
                 int delay = (int) (1500 - (position % 1000));
                 if (overflowCounter < 0 && !fragmentPaused) {
                     overflowCounter++;
-                    songProgressbar.postDelayed(mUpdateProgress, delay);
+                    qcSongProgressbar.postDelayed(mUpdateProgress, delay);
                 } else {
-                    songProgressbar.removeCallbacks(this);
+                    qcSongProgressbar.removeCallbacks(this);
                 }
             }
 
@@ -83,10 +83,10 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
         View mView = inflater.inflate(R.layout.bottom_nowplaying_card,container,false);
         this.mView =mView;
         ButterKnife.bind(this,mView);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) songProgressbar.getLayoutParams();
-        songProgressbar.measure(0, 0);
-        layoutParams.setMargins(0, -(songProgressbar.getMeasuredHeight() / 2), 0, 0);
-        songProgressbar.setLayoutParams(layoutParams);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) qcSongProgressbar.getLayoutParams();
+        qcSongProgressbar.measure(0, 0);
+        layoutParams.setMargins(0, -(qcSongProgressbar.getMeasuredHeight() / 2), 0, 0);
+        qcSongProgressbar.setLayoutParams(layoutParams);
         btnPlayPause.setColor(R.color.cmn_accent);
 
         ((MiBaseActivity) getActivity()).setMediaStateListenerListener(this);
@@ -158,8 +158,8 @@ public class QuickControlFragment extends Fragment implements MediaStateListener
                     });
         }
         duetoplaypause = false;
-        songProgressbar.setMax((int) MusicPlayer.duration());
-        songProgressbar.postDelayed(mUpdateProgress, 10);
+        qcSongProgressbar.setMax((int) MusicPlayer.duration());
+        qcSongProgressbar.postDelayed(mUpdateProgress, 10);
 
     }
     /**

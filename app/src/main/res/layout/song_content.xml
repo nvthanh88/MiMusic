@@ -3,13 +3,16 @@
     android:orientation="vertical"
     style="@style/Layout.FullWidthHeight"
     android:background="@color/cmn_white"
-    android:paddingTop="@dimen/padding_normal">
+    android:paddingTop="@dimen/padding_normal"
+    android:paddingLeft="@dimen/padding_smaller"
+    android:paddingRight="@dimen/padding_smaller">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_large"
         android:text="@string/txtRecycleSongText"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/cmn_black"
         android:textStyle="bold"/>
 
     <TextView

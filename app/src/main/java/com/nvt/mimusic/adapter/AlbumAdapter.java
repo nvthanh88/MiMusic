@@ -50,7 +50,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         final Album albumItem = albumList.get(position);
         holder.txtAlbumTile.setText(albumItem.getName());
         holder.txtAlbumSongs.setText(String.valueOf(albumItem.getNumberOfSongs()) + " songs");
-
         //Set album thumbnail
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(albumItem.getAlbumId()).toString(),holder.imgAlbumThumbnail
@@ -102,8 +101,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
          TextView txtAlbumSongs;
          @BindView(R.id.imgAlbumThumbnail)
          ImageView imgAlbumThumbnail;
-         @BindView(R.id.imgOptions)
-         ImageView imgOptions;
 
          ViewHolder(View itemView) {
              super(itemView);

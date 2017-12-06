@@ -20,7 +20,8 @@ import com.nvt.mimusic.core.MusicService;
 import com.nvt.mimusic.listener.MediaStateListener;
 import com.nvt.mimusic.utils.PlayBackStatus;
 import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
-import com.nvt.mimusic.view.panel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 
 import java.util.ArrayList;
 
@@ -140,35 +141,7 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
      * Setup Slide Panel
      *
      * */
-    public void setupSlidePanel(SlidingUpPanelLayout panelLayout)
-    {
-        panelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
 
-            }
-
-            @Override
-            public void onPanelCollapsed(View panel) {
-
-            }
-
-            @Override
-            public void onPanelExpanded(View panel) {
-
-            }
-
-            @Override
-            public void onPanelAnchored(View panel) {
-
-            }
-
-            @Override
-            public void onPanelHidden(View panel) {
-
-            }
-        });
-    }
     public void setMediaStateListenerListener(final MediaStateListener status) {
         if (status == this) {
             throw new UnsupportedOperationException("Override the method, don't add a listener");
@@ -178,7 +151,7 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
             mediaStateListenerArrayList.add(status);
         }
     }
-    public class initQuickControls extends AsyncTask<String, Void, String> {
+    /*public class initQuickControls extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -202,6 +175,6 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
         @Override
         protected void onPreExecute() {
         }
-    }
+    }*/
 
 }

@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/topContainer"
+    android:id="@+id/quickPlayingControl"
     android:layout_width="wrap_content"
-    android:layout_height="55dp"
-    android:layout_gravity="top"
-    android:background="@color/cmn_white"
-    >
-
+    android:layout_height="60dp"
+    android:layout_gravity="bottom"
+    android:background="@color/cmn_transparent">
+    <ProgressBar
+        android:id="@+id/qcSongProgressbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_above="@id/qcAlbumArt"
+        android:progress="30"
+        android:tag="tint_accent_color"
+        android:backgroundTint="@color/cmn_transparent"/>
     <com.nvt.mimusic.wiget.CircleImageView
         android:id="@+id/qcAlbumArt"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/padding_smaller"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/album1" />
+        android:src="@drawable/album1"
+       />
 
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/qcAlbumArt"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
-
-        <ProgressBar
-            android:id="@+id/songProgressbar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:maxHeight="@dimen/padding_smaller"
-            android:progress="30"
-            android:tag="tint_accent_color" />
 
         <TextView
             android:id="@+id/qcSongTitle"
@@ -66,13 +66,15 @@
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:id="@+id/frameLayout">
 
         <com.nvt.mimusic.wiget.PlayPauseButton
             android:id="@+id/btnPlayPause"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_gravity="center" />
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            />
 
         <View
             android:id="@+id/play_pause_wrapper"

@@ -3,14 +3,13 @@
     android:id="@+id/toolbarBottom"
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Layout.FullWidth"
-    android:layout_height="@dimen/toolbar_height"
+    android:layout_height="55dp"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
     android:weightSum="5"
     android:background="@color/colorPrimaryDark"
     android:layout_alignParentBottom="true"
     tools:context="com.nvt.mimusic.view.activity.MiMainActivity"
-
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:id="@+id/ToolbarSearchTab"
