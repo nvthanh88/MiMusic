@@ -24,7 +24,7 @@
     <string name="txtRecycleLoadMoreString">See more</string>
     <string name="txtRecycleAlbumText">Album list</string>
     <string name="txtRecycleSongText">Song list</string>
-    <string name="txtSongTileText">Song Tile</string>
+    <string name="txtSongTitleText">Song Title</string>
     <string name="txtArtist">Artist</string>
     <string name="error_playing_track">error_playing_track</string>
 

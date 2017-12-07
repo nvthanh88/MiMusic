@@ -19,7 +19,7 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:text="Home"
+            android:background="@drawable/ic_home"
             android:textColor="@color/cmn_white"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ToolbarMailTab"
+        android:id="@+id/ToolbarGenericTab"
         style="@style/Layout.FullWidthHeight"
         android:layout_gravity="center"
         android:layout_weight="1"
@@ -36,7 +36,7 @@
         <TextView
             android:textColor="@color/cmn_white"
             style="@style/Layout.WrapWidthHeight"
-            android:text="@string/ToolbarBottomTabGenericsString"
+            android:background="@drawable/ic_generics"
             />
     </LinearLayout>
     <LinearLayout
@@ -48,7 +48,7 @@
             android:textColor="@color/cmn_white"
 
             style="@style/Layout.WrapWidthHeight"
-            android:text="@string/ToolbarBottomTabPlayString"/>
+            android:background="@drawable/ic_play"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ToolbarChatTab"
@@ -58,7 +58,7 @@
         <TextView
             android:textColor="@color/cmn_white"
             style="@style/Layout.WrapWidthHeight"
-            android:text="@string/ToolbarBottomTabSearchString"/>
+            android:background="@drawable/ic_search"/>
 
     </LinearLayout>
     <LinearLayout
@@ -70,8 +70,7 @@
         android:orientation="horizontal">
         <TextView
             android:textColor="@color/cmn_white"
-
             style="@style/Layout.WrapWidthHeight"
-            android:text="@string/ToolbarBottomTabMenuString"/>
+            android:background="@drawable/ic_menu"/>
     </LinearLayout>
 </LinearLayout>

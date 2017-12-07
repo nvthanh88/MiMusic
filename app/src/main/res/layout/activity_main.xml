@@ -28,9 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="12">
-            <include layout="@layout/main_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
+                android:id="@+id/frameMainContent">
+                <include layout="@layout/main_content"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
+            </FrameLayout>
         </ScrollView>
         <include
             layout="@layout/bottom_nowplaying_card"

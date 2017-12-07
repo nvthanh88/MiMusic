@@ -1,9 +1,11 @@
 package com.nvt.mimusic.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.nvt.mimusic.R;
+import com.nvt.mimusic.utils.NavigationUtils;
+
 /**
  * Created by Admin on 10/16/17.
  */
@@ -30,9 +34,9 @@ import com.nvt.mimusic.R;
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
 
     List<Album> albumList;
-    Context mAppContext;
+    Activity mAppContext;
 
-    public AlbumAdapter(List<Album> albumList, Context mAppContext) {
+    public AlbumAdapter(List<Album> albumList, Activity mAppContext) {
         this.albumList = albumList;
         this.mAppContext = mAppContext;
 
@@ -46,7 +50,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Album albumItem = albumList.get(position);
         holder.txtAlbumTile.setText(albumItem.getName());
         holder.txtAlbumSongs.setText(String.valueOf(albumItem.getNumberOfSongs()) + " songs");
@@ -80,6 +84,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Toast.makeText(mAppContext,"Open Album : " + albumItem.getAlbumId(),Toast.LENGTH_LONG).show();
+                holder.imgAlbumThumbnail.setTransitionName("transition_album_art" + position);
+                NavigationUtils.navigateToAlbum(mAppContext,albumItem.getAlbumId(),new Pair<View, String>((View)holder.imgAlbumThumbnail, "transition_album_art" + position));
 
 
             }
@@ -113,6 +119,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
                          @Override
                          public void run() {
                              //Todo load album content
+                             NavigationUtils.navigateToAlbum(mAppContext,albumList.get(getAdapterPosition()).getAlbumId(),new Pair<View, String>(imgAlbumThumbnail, "transition_album_art" + getAdapterPosition()));
 
                          }
                      }, 100);

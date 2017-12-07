@@ -143,7 +143,6 @@ public class MiMainActivity extends MiBaseActivity {
 
         if (getBaseContext() == null) return;
         mCurrentTab = tab;
-
         FragmentManager fragmentManager = getFragmentManager();
         String tag = fragmentClass.getName();
         try {
