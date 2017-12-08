@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class AlbumDataLoader {
-    public Album getAlbum (Cursor cursor){
+    public static Album getAlbum (Cursor cursor){
         Album album = new Album();
         if (cursor != null)
         {
@@ -44,6 +44,12 @@ public class AlbumDataLoader {
     public static List<Album> getAllAlbum(Context context ){
         return getAllAlbumForCursor(makeAlbumCursor(context,null,null));
     }
+    public static Album getAlbum(Context context , long albumId)
+    {
+        return getAlbum(makeAlbumCursor(context,"_id =?",new String[]{String.valueOf(albumId)}));
+    }
+
+
     public static Cursor makeAlbumCursor(Context context , String selection , String[] paramArrayOfString)
     {
         final String albumSortOrder = PreferencesUtility.getInstance(context).getAlbumSortOrder();

@@ -21,7 +21,7 @@ public class SongDataLoader {
         if (cursor != null && cursor.moveToFirst())
         do
         {
-            arrayList.add(new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6)));
+            arrayList.add(new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6), cursor.getInt(7)));
         }
         while (cursor.moveToNext());
         if (cursor != null)
@@ -36,7 +36,7 @@ public class SongDataLoader {
         Song song = new Song();
         if (cursor != null && cursor.moveToFirst())
         {
-            song = new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6));
+            song = new Song(cursor.getString(0),cursor.getLong(1),cursor.getString(2),cursor.getLong(3),cursor.getString(4),cursor.getLong(5),cursor.getInt(6), cursor.getInt(7));
         }
         if (cursor != null)
             cursor.close();
@@ -55,7 +55,7 @@ public class SongDataLoader {
         if (!TextUtils.isEmpty(selection)) {
             selectionStatement = selectionStatement + " AND " + selection;
         }
-        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{ "title","_id", "artist", "artist_id", "album", "album_id","track"}, selectionStatement, paramArrayOfString, sortOrder);
+        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{ "title","_id", "artist", "artist_id", "album", "album_id","track","duration"}, selectionStatement, paramArrayOfString, sortOrder);
 
     }
 

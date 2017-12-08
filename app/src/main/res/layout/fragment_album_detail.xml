@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/albumDetailsAppBar"
@@ -16,9 +14,9 @@
             android:id="@+id/albumDetailsCollapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="370dp"
-            android:background="@android:color/white"
+            android:background="@color/cmn_white_transparent"
             android:theme="@style/Theme.AppCompat"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="@color/colorPrimaryDark"
             app:expandedTitleTextAppearance="@style/TextApperance.Album.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:statusBarScrim="@color/colorPrimaryDark">
@@ -36,26 +34,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#22000000" />
+                android:background="@color/cmn_transparent" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/cmn_gray_bg"
+                android:background="@color/cmn_transparent"
                 android:orientation="horizontal"
-                android:visibility="gone">
-
-                <com.nvt.mimusic.wiget.CircleImageView
-                    android:id="@+id/albumDetailsArt"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:visibility="gone" />
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -70,29 +58,22 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:singleLine="true"
-                        android:textColor="#ffffff"
+                        android:text="AlbumTitle"
+                        android:textColor="@color/cmn_white"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/albumDetails"
+                        android:id="@+id/albumDetailsInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="3dp"
-                        android:textColor="#ffffff"
+                        android:text="AlbumArtist"
+                        android:textColor="@color/cmn_white"
+                        android:textStyle="bold"
                         android:textSize="16sp" />
                 </LinearLayout>
-
             </LinearLayout>
-
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/albumDetailsToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="5dp"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

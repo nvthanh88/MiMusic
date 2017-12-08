@@ -12,6 +12,7 @@ public class Song {
     private String albumName;
     private long albumId;
     private int trackNumber;
+    private int duration;
 
     public int getTrackNumber() {
         return trackNumber;
@@ -73,7 +74,7 @@ public class Song {
 
     }
 
-    public Song(String name, long songId, String artistName, long artisId, String albumName, long albumId , int trackNumber) {
+    public Song(String name, long songId, String artistName, long artisId, String albumName, long albumId, int trackNumber, int duration) {
 
         this.name = name;
         this.songId = songId;
@@ -82,5 +83,14 @@ public class Song {
         this.albumName = albumName;
         this.albumId = albumId;
         this.trackNumber = trackNumber;
+        this.duration = duration;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

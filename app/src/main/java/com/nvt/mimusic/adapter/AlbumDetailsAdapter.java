@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
  */
 
 public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder> {
-    Activity mAppContext;
-    List<Song> songList;
-    long[] songIds;
-    long albumId;
+    private Activity mAppContext;
+    private List<Song> songList;
+    private long[] songIds;
+    private long albumId;
 
     public AlbumDetailsAdapter(Activity mAppContext, List<Song> songList, long albumId) {
         this.mAppContext = mAppContext;
@@ -37,7 +37,7 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mView = LayoutInflater.from(mAppContext).inflate(R.layout.item_album_songs,parent,false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_album_songs,parent,false);
         return new ViewHolder(mView);
     }
 
@@ -46,7 +46,7 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
         Song songItem = songList.get(position);
         holder.txtAlbumArtistName.setText(songItem.getArtistName());
         holder.txtAlbumSongTitle.setText(songItem.getName());
-        holder.txtAlbumSongIndex.setText(songItem.getTrackNumber());
+        holder.txtAlbumSongIndex.setText(String.valueOf(songItem.getTrackNumber()));
 
     }
 
