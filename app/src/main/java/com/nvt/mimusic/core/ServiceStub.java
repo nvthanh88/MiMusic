@@ -35,7 +35,7 @@ public class ServiceStub extends MiCoreService.Stub {
 
     @Override
     public void stop() throws RemoteException {
-        //mService.get().stop();
+        mService.get().stop(true);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ServiceStub extends MiCoreService.Stub {
 
     @Override
     public void next() throws RemoteException {
-        //mService.get().gotoNext(true);
+        mService.get().gotoNext(true);
     }
 
     @Override

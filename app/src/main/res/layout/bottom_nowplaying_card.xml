@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="60dp"
     android:layout_gravity="bottom"
-    android:background="@color/cmn_transparent">
+    android:background="@color/cmn_white">
     <ProgressBar
         android:id="@+id/qcSongProgressbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"

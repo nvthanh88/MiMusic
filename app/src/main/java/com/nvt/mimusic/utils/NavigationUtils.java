@@ -33,6 +33,7 @@ import com.nvt.mimusic.R;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.view.fragment.album.AlbumDetailsFragment;
+import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,9 @@ public class NavigationUtils {
     public static void navigateToPlaylistDetail(Activity context, String action, long firstAlbumID, String playlistName, int foregroundcolor, long playlistID, ArrayList<Pair> transitionViews) {
 
     }
+
+
+
 
 
 

@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.nvt.mimusic.constant.Constant;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
@@ -41,7 +43,13 @@ public  final class MultiPlayer implements MediaPlayer.OnErrorListener, MediaPla
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.i(TAG, "onCompletion: ");
+        if (mp == mCurrentPlayer && mNextMediaPlayer != null) {
+            mCurrentPlayer.release();
+            mCurrentPlayer = mNextMediaPlayer;
+            mNextMediaPath = null;
+            mNextMediaPlayer = null;
+            mHandler.sendEmptyMessage(Constant.TRACK_WENT_TO_NEXT);
+        }
 
     }
 
@@ -137,4 +145,8 @@ public  final class MultiPlayer implements MediaPlayer.OnErrorListener, MediaPla
             e.printStackTrace();
         }
     }
+    public void setHandler(final Handler handler) {
+        mHandler = handler;
+    }
+
 }

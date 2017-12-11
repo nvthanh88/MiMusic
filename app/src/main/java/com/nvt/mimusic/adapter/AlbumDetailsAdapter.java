@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nvt.mimusic.R;
+import com.nvt.mimusic.core.MiApplication;
+import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.model.Song;
 import com.nvt.mimusic.wiget.CircleImageView;
 
 import java.util.List;
+import java.util.logging.Handler;
 import java.util.zip.Inflater;
 
 import butterknife.BindView;
@@ -55,7 +58,7 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
         return songList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.txtAlbumSongTitle)
         TextView txtAlbumSongTitle;
         @BindView(R.id.txtAlbumSongIndex)
@@ -65,6 +68,20 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            android.os.Handler handler = new android.os.Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MusicPlayer.playAll(mAppContext,songIds,getAdapterPosition(),albumId, MiApplication.IdType.Album,false);
+                }
+            },100);
+
         }
     }
     public long[] getSongIds() {

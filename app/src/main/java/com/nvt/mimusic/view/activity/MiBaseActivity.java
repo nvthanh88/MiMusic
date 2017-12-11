@@ -5,22 +5,24 @@ import android.content.ComponentName;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
+
 import android.os.AsyncTask;
 import android.os.IBinder;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+
 
 import com.nvt.mimusic.MiCoreService;
 import com.nvt.mimusic.R;
+import com.nvt.mimusic.constant.Constant;
 import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.core.MusicService;
 import com.nvt.mimusic.listener.MediaStateListener;
 import com.nvt.mimusic.utils.PlayBackStatus;
-import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 
 
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
         // Play and pause changes
         filter.addAction(MusicService.PLAYSTATE_CHANGED);
         // Track changes
-        filter.addAction(MusicService.META_CHANGED);
+        filter.addAction(Constant.META_CHANGED);
         // Update a list, probably the playlist fragment's
         filter.addAction(MusicService.REFRESH);
         // If a playlist has changed, notify us
@@ -151,30 +153,8 @@ public class MiBaseActivity extends AppCompatActivity implements ServiceConnecti
             mediaStateListenerArrayList.add(status);
         }
     }
-    /*public class initQuickControls extends AsyncTask<String, Void, String> {
 
-        @Override
-        protected String doInBackground(String... params) {
-            QuickControlFragment fragment1 = new QuickControlFragment();
-            FragmentManager fragmentManager1 = getSupportFragmentManager();
-            fragmentManager1.beginTransaction()
-                    .replace(R.id.quickcontrols_container, fragment1).commitAllowingStateLoss();
-            return "Executed";
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-//            QuickControlsFragment.topContainer.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    NavigationUtils.navigateToNowplaying(BaseActivity.this, false);
-//                }
-//            });
-        }
 
-        @Override
-        protected void onPreExecute() {
-        }
-    }*/
 
 }

@@ -63,7 +63,8 @@
                     android:layout_height="@dimen/btn_height"
                     android:clickable="true"
                     android:scaleType="fitCenter"
-                    android:tag="bg_tint_accent_color" />
+                    android:tag="bg_tint_accent_color"
+                   />
 
             </LinearLayout>
             <com.nvt.mimusic.wiget.CircularSeekBar

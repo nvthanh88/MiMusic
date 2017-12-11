@@ -14,7 +14,7 @@
             android:id="@+id/albumDetailsCollapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="370dp"
-            android:background="@color/cmn_white_transparent"
+            android:background="@color/colorPrimaryDark"
             android:theme="@style/Theme.AppCompat"
             app:contentScrim="@color/colorPrimaryDark"
             app:expandedTitleTextAppearance="@style/TextApperance.Album.Title"
@@ -77,7 +77,6 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/albumDetailsRecyclerView"

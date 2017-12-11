@@ -83,7 +83,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         holder.imgAlbumThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mAppContext,"Open Album : " + albumItem.getAlbumId(),Toast.LENGTH_LONG).show();
                 holder.imgAlbumThumbnail.setTransitionName("transition_album_art" + position);
                 NavigationUtils.navigateToAlbum(mAppContext,albumItem.getAlbumId(),new Pair<View, String>((View)holder.imgAlbumThumbnail, "transition_album_art" + position));
 

@@ -1,6 +1,7 @@
 package com.nvt.mimusic.view.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,23 +28,29 @@ import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.ScreenIDs;
 import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.core.MusicPlayer;
+import com.nvt.mimusic.listener.MediaStateListener;
+import com.nvt.mimusic.utils.NavigationUtils;
 import com.nvt.mimusic.utils.PermissionCallback;
 import com.nvt.mimusic.utils.PermissionRequest;
-import com.nvt.mimusic.view.fragment.control.QuickControlFragment;
+
 import com.nvt.mimusic.view.fragment.home.AlbumFragment;
 import com.nvt.mimusic.view.fragment.home.SongFragment;
+import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
 import com.nvt.mimusic.wiget.PlayPauseButton;
+
+import java.util.logging.Handler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Admin on 11/16/17.
  */
 
-public class MiMainActivity extends MiBaseActivity {
+public class MiMainActivity extends MiBaseActivity implements MediaStateListener{
     private final String TAG = getClass().getSimpleName();
-    private Context context;
+    private Activity context;
     private ScreenIDs.ID mCurrentTab;
     private MiBaseFragment mCurrentFragment;
     boolean duetoplaypause;
@@ -84,10 +92,16 @@ public class MiMainActivity extends MiBaseActivity {
         }
         /**
          * Setup palnel
+         *
          * */
 
 
+
+
+
+
     }
+
 
     /**
      * Check permission and load
@@ -114,6 +128,7 @@ public class MiMainActivity extends MiBaseActivity {
         @Override
         public void permissionGranted() {
             gotoHomeFragment.run();
+
         }
 
         @Override
@@ -166,7 +181,6 @@ public class MiMainActivity extends MiBaseActivity {
     }
     @Override
     public void onMetaChanged() {
-        showPlayingControl(true);
         updateState();
         updateNowPlayingCard();
     }
@@ -189,6 +203,7 @@ public class MiMainActivity extends MiBaseActivity {
         }
     }
     public void updateNowPlayingCard(){
+        Log.i(TAG, "updateNowPlayingCard: "+ MusicPlayer.getArtistName() + MusicPlayer.getTrackName());
         qcSongTitle.setText(MusicPlayer.getTrackName());
         qcArtist.setText(MusicPlayer.getArtistName());
         if (!duetoplaypause) {
@@ -248,8 +263,22 @@ public class MiMainActivity extends MiBaseActivity {
 
         }
     };
-    public void showPlayingControl(Boolean isShow)
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    @OnClick(R.id.quickPlayingControl)
+        public void openNowPlaying() {
+        openScreenBackgroundTask(ScreenIDs.ID.HOME, NowPlayingFragment.class, R.id.frameMainContent, null, false);
+        isShowQuickControl(false);
+    }
+
+
+    public void isShowQuickControl(boolean isShow)
     {
         quickPlayingControl.setVisibility(isShow ? View.VISIBLE:View.GONE);
     }
+
 }
