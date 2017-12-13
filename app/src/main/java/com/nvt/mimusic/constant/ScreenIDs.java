@@ -6,9 +6,10 @@ package com.nvt.mimusic.constant;
 
 public class ScreenIDs {
     public enum ID {
-        WELCOME,
-        LOGIN,
-        REGISTER,
+        SEARCH_TAB,
+        NOW_PLAYING,
+        GENERICS_TAB,
+        MENU_TAB,
         HOME;
 
 

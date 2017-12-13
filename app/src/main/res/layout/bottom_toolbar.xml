@@ -12,7 +12,7 @@
     tools:context="com.nvt.mimusic.view.activity.MiMainActivity"
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
-        android:id="@+id/ToolbarSearchTab"
+        android:id="@+id/homeTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:gravity="center"
@@ -27,7 +27,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ToolbarGenericTab"
+        android:id="@+id/genericTab"
         style="@style/Layout.FullWidthHeight"
         android:layout_gravity="center"
         android:layout_weight="1"
@@ -40,7 +40,7 @@
             />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ToolbarLoginTab"
+        android:id="@+id/nowPlayingTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:orientation="horizontal">
@@ -51,7 +51,7 @@
             android:background="@drawable/ic_play"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ToolbarChatTab"
+        android:id="@+id/searchTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:orientation="horizontal">
@@ -63,7 +63,7 @@
     </LinearLayout>
     <LinearLayout
 
-        android:id="@+id/ToolbarMenuTab"
+        android:id="@+id/menuTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:gravity="center"

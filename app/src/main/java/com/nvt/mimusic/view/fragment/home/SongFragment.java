@@ -9,7 +9,7 @@ import android.util.TypedValue;
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.adapter.SongAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
-import com.nvt.mimusic.loader.SongDataLoader;
+import com.nvt.mimusic.loader.SongLoader;
 import com.nvt.mimusic.helper.GridSpacingItemDecoration;
 import com.nvt.mimusic.model.Song;
 
@@ -47,7 +47,7 @@ public class SongFragment  extends MiBaseFragment{
     protected void initControls() {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mAppContext,1);
         songList = new ArrayList<>();
-        mSongAdapter = new SongAdapter(SongDataLoader.getAllSongs(mAppContext),mAppContext,albumID);
+        mSongAdapter = new SongAdapter(SongLoader.getAllSongs(mAppContext),mAppContext,albumID);
         songRecycleView.setLayoutManager(layoutManager);
         songRecycleView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10 ), true));
         songRecycleView.setItemAnimator(new DefaultItemAnimator());

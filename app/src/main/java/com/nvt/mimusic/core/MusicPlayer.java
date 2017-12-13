@@ -88,6 +88,20 @@ public class MusicPlayer {
         }
 
     }
+
+    /**
+     * Get current Audio Id
+     * */
+
+    public static final long getCurrentAudioId(){
+        try {
+            if (mMiCoreService != null)
+                return  mMiCoreService.getAudioId();
+        }catch (final RemoteException e)  {
+            e.printStackTrace();
+        }
+        return -1;
+    }
     /*Get Queue*/
 
     public static final long[] getQueue() {
@@ -188,6 +202,18 @@ public class MusicPlayer {
             }
         }
         return  0;
+    }
+    /**
+     * Remove Track
+     * */
+    public static final int removeTrack(final long id) {
+        try {
+            if (mMiCoreService != null) {
+                return mMiCoreService.removeTrack(id);
+            }
+        } catch (final RemoteException ingored) {
+        }
+        return 0;
     }
 
     /*Bind Service*/

@@ -14,5 +14,6 @@ public class Constant {
     //
     public static final String META_CHANGED = "mimusic.metachanged";
 
-
+    //Index
+    public static final int NUMBER_OF_TOP_SONG = 10;
 }

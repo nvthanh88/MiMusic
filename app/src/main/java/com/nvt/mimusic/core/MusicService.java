@@ -872,6 +872,10 @@ public class MusicService extends Service {
         }
 
     }
+    /**
+     * Remove Track
+     * */
+
 
     public void setNextTrack(int position) {
         mNextPlayPos = position;

@@ -31,8 +31,11 @@ import android.view.View;
 
 import com.nvt.mimusic.R;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
+import com.nvt.mimusic.constant.ScreenIDs;
 import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.view.fragment.album.AlbumDetailsFragment;
+import com.nvt.mimusic.view.fragment.home.AlbumFragment;
+import com.nvt.mimusic.view.fragment.home.SongFragment;
 import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
 
 import java.util.ArrayList;
@@ -42,28 +45,28 @@ public class NavigationUtils {
 
     @SuppressLint("ResourceType")
     @TargetApi(21)
-    public static void navigateToAlbum(Activity context, long albumID, Pair<View, String> transitionViews) {
+    public static void navigateToAlbum(ScreenIDs.ID tab,Activity context, long albumID, Pair<View, String> transitionViews) {
         Log.i(TAG, "navigateToAlbum: " + albumID);
         FragmentManager fragmentManager = context.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment mAlbumFragment;
+        Fragment mFragment;
         if (MiApplication.isLollipop())
         {
             Transition changeImage = TransitionInflater.from(context).inflateTransition(R.transition.image_transform);
             fragmentTransaction.addSharedElement(transitionViews.first,transitionViews.second);
-            mAlbumFragment = AlbumDetailsFragment.newInstance(albumID,true,transitionViews.second);
-            mAlbumFragment.setSharedElementEnterTransition(changeImage);
+            mFragment = AlbumDetailsFragment.newInstance(albumID,true,transitionViews.second);
+            mFragment.setSharedElementEnterTransition(changeImage);
 
         }else
         {
             fragmentTransaction.setCustomAnimations(R.anim.activity_fade_in,
                     R.anim.activity_fade_out, R.anim.activity_fade_in, R.anim.activity_fade_out);
-            mAlbumFragment = AlbumDetailsFragment.newInstance(albumID,false,null);
+            mFragment = AlbumDetailsFragment.newInstance(albumID,false,null);
         }
 
         fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameSongContent));
         fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameAlbumContent));
-        fragmentTransaction.add(R.id.frameMainContent,mAlbumFragment);
+        fragmentTransaction.replace(R.id.frameMainContent,mFragment);
         fragmentTransaction.addToBackStack(null).commit();
 
 
@@ -78,9 +81,32 @@ public class NavigationUtils {
 
 
     @TargetApi(21)
-    public static void navigateToPlaylistDetail(Activity context, String action, long firstAlbumID, String playlistName, int foregroundcolor, long playlistID, ArrayList<Pair> transitionViews) {
+    public static void navigateToPlaylistDetail(ScreenIDs.ID tab,Activity context, String action, long firstAlbumID, String playlistName, int foregroundcolor, long playlistID, ArrayList<Pair> transitionViews) {
 
     }
+    public static void navigateToNowPlaying(ScreenIDs.ID tab,Activity context) {
+        Log.i(TAG, "navigateToNowPlaying: ");
+        FragmentManager fragmentManager = context.getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment mFragment = new NowPlayingFragment();
+        fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameSongContent));
+        fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameAlbumContent));
+        fragmentTransaction.replace(R.id.frameMainContent,mFragment);
+        fragmentTransaction.addToBackStack(null).commit();
+    }
+    public static void navigateToHome(ScreenIDs.ID tab , Activity context)
+    {
+        Log.i(TAG, "navigateToHome: ");
+        FragmentManager fragmentManager = context.getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment mSongFragment = new SongFragment();
+        Fragment mAlbumFragment = new AlbumFragment();
+        fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameMainContent));
+        fragmentTransaction.replace(R.id.frameSongContent,mSongFragment);
+        fragmentTransaction.replace(R.id.frameAlbumContent,mAlbumFragment);
+        fragmentTransaction.addToBackStack(null).commit();
+    }
+
 
 
 

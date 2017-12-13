@@ -37,16 +37,10 @@
                     android:layout_width="match_parent" />
             </FrameLayout>
         </ScrollView>
-        <FrameLayout
-            android:id="@+id/frameQuickControl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
             <include
             layout="@layout/bottom_nowplaying_card"
             android:layout_height="60dp"
-            android:layout_width="match_parent"
-            /></FrameLayout>
-
+            android:layout_width="match_parent"/>
     </LinearLayout>
     <include
         android:id="@+id/bottomMenu"

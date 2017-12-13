@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Admin on 10/19/17.
  */
 
-public class AlbumDataLoader {
+public class AlbumLoader {
     public static Album getAlbum (Cursor cursor){
         Album album = new Album();
         if (cursor != null)

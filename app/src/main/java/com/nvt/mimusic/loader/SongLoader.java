@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Admin on 10/19/17.
  */
 
-public class SongDataLoader {
+public class SongLoader {
     private static final long[] sEmptyList = new long[0];
     public static ArrayList<Song> getSongListForCursor(Cursor cursor){
         ArrayList arrayList = new ArrayList();

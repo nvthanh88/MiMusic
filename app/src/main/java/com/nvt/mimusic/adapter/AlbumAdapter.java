@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nvt.mimusic.constant.ScreenIDs;
 import com.nvt.mimusic.core.MiApplication;
 
 import com.nvt.mimusic.model.Album;
@@ -84,15 +85,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 holder.imgAlbumThumbnail.setTransitionName("transition_album_art" + position);
-                NavigationUtils.navigateToAlbum(mAppContext,albumItem.getAlbumId(),new Pair<View, String>((View)holder.imgAlbumThumbnail, "transition_album_art" + position));
+                NavigationUtils.navigateToAlbum(ScreenIDs.ID.SEARCH_TAB,mAppContext,albumItem.getAlbumId(),new Pair<View, String>((View)holder.imgAlbumThumbnail, "transition_album_art" + position));
 
 
             }
         });
     }
-
-
-
 
     @Override
     public int getItemCount() {
@@ -118,7 +116,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
                          @Override
                          public void run() {
                              //Todo load album content
-                             NavigationUtils.navigateToAlbum(mAppContext,albumList.get(getAdapterPosition()).getAlbumId(),new Pair<View, String>(imgAlbumThumbnail, "transition_album_art" + getAdapterPosition()));
+                             NavigationUtils.navigateToAlbum(ScreenIDs.ID.SEARCH_TAB,mAppContext,albumList.get(getAdapterPosition()).getAlbumId(),new Pair<View, String>(imgAlbumThumbnail, "transition_album_art" + getAdapterPosition()));
 
                          }
                      }, 100);

@@ -69,10 +69,16 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     ProgressBar qcSongProgressbar;
     @BindView(R.id.quickPlayingControl)
     RelativeLayout quickPlayingControl;
-
-
-
-
+    @BindView(R.id.homeTab)
+    LinearLayout homeTab;
+    @BindView(R.id.genericTab)
+    LinearLayout genericTab;
+    @BindView(R.id.nowPlayingTab)
+    LinearLayout nowPlayingTab;
+    @BindView(R.id.searchTab)
+    LinearLayout searchTab;
+    @BindView(R.id.menuTab)
+    LinearLayout menuTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +100,6 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
          * Setup palnel
          *
          * */
-
-
-
-
-
 
     }
 
@@ -271,14 +272,28 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     }
     @OnClick(R.id.quickPlayingControl)
         public void openNowPlaying() {
-        openScreenBackgroundTask(ScreenIDs.ID.HOME, NowPlayingFragment.class, R.id.frameMainContent, null, false);
-        isShowQuickControl(false);
+        NavigationUtils.navigateToNowPlaying(ScreenIDs.ID.NOW_PLAYING,this);
+    }
+    public  void isShowQuickControl(boolean isShow)
+    {
+        quickPlayingControl.setVisibility(isShow ? View.VISIBLE:View.GONE);
+    }
+    @OnClick(R.id.homeTab)
+    public void openHomeTab(){
+        NavigationUtils.navigateToHome(ScreenIDs.ID.HOME,this);
+    }
+
+    @OnClick(R.id.nowPlayingTab)
+    public void openNowPlayingFromTab() {
+        NavigationUtils.navigateToNowPlaying(ScreenIDs.ID.NOW_PLAYING,this);
     }
 
 
-    public void isShowQuickControl(boolean isShow)
-    {
-        quickPlayingControl.setVisibility(isShow ? View.VISIBLE:View.GONE);
+    public void setHightLightTab(ScreenIDs.ID tab){
+       switch (tab)
+       {
+           case HOME:
+       }
     }
 
 }

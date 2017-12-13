@@ -1,12 +1,9 @@
 package com.nvt.mimusic.view.fragment.album;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,13 +16,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.adapter.AlbumAdapter;
 import com.nvt.mimusic.adapter.AlbumDetailsAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.constant.Constant;
 import com.nvt.mimusic.core.MiApplication;
-import com.nvt.mimusic.helper.GridSpacingItemDecoration;
-import com.nvt.mimusic.loader.AlbumDataLoader;
+import com.nvt.mimusic.loader.AlbumLoader;
 import com.nvt.mimusic.loader.AlbumSongLoader;
 import com.nvt.mimusic.model.Album;
 import com.nvt.mimusic.model.Song;
@@ -108,7 +103,7 @@ public class AlbumDetailsFragment extends MiBaseFragment {
     }
     public void setUpAlbumCover()
     {
-        album = AlbumDataLoader.getAlbum(mAppContext,albumId);
+        album = AlbumLoader.getAlbum(mAppContext,albumId);
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(albumId).toString(),albumDetailsAlbumArt
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)

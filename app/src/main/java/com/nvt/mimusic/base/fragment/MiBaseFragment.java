@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.nvt.mimusic.view.activity.MiMainActivity;
+import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import android.app.Fragment;
@@ -51,11 +53,19 @@ public abstract class MiBaseFragment extends Fragment {
             {
                 ((ViewGroup) mView.getParent()).removeView(mView);
             }
+
         }
         if (!mIsViewInitialized)
         {
             onInitializeView();
             mIsViewInitialized = true;
+        }
+        if (this instanceof NowPlayingFragment )
+        {
+           if (mActivity != null)
+               mActivity.isShowQuickControl(false);
+        } else {
+            mActivity.isShowQuickControl(true);
         }
 
         return mView;
@@ -101,6 +111,13 @@ public abstract class MiBaseFragment extends Fragment {
     }
     //Call Back Fragment Method
     public void onComeBackFragment(Bundle mBundle) {
+        if (this instanceof NowPlayingFragment )
+        {
+            if (mActivity != null)
+                mActivity.isShowQuickControl(false);
+        } else {
+            mActivity.isShowQuickControl(true);
+        }
     }
 
 
