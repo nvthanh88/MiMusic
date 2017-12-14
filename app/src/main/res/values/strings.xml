@@ -23,7 +23,7 @@
     <string name="add_to_play_next">Add to Play Next</string>
     <string name="txtRecycleLoadMoreString">See more</string>
     <string name="txtRecycleAlbumText">Album list</string>
-    <string name="txtRecycleSongText">Song list</string>
+    <string name="txtRecycleSongText">Top Songs</string>
     <string name="txtSongTitleText">Song Title</string>
     <string name="txtArtist">Artist</string>
     <string name="error_playing_track">error_playing_track</string>

@@ -1,24 +1,53 @@
 package com.nvt.mimusic.loader;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import com.nvt.mimusic.constant.Constant;
+import com.nvt.mimusic.database.RecentStore;
+import com.nvt.mimusic.database.SongPlayedCounter;
 import com.nvt.mimusic.loader.cursor.SortedCursor;
+
+import java.util.ArrayList;
 
 /**
  * Created by Admin on 12/13/17.
  */
 
 public class TopTrackLoader extends SongLoader {
-    private Context context;
-    private QuerryType querryType;
+    
+    private static Context context;
+    private static  QuerryType querryType;
 
-    public TopTrackLoader(Context context, QuerryType querryType) {
+    public  TopTrackLoader(Context context, QuerryType querryType) {
         this.context = context;
         this.querryType = querryType;
     }
+    public static Cursor getCursor() {
+        SortedCursor retCursor = null;
+        if (querryType == QuerryType.TOP_TRACK) {
+            retCursor = makeTopTracksCursor(context);
+        } else if (querryType == QuerryType.RECENT_SONGS) {
+            retCursor = makeRecentTracksCursor(context);
+        }
+
+        if (retCursor != null) {
+            ArrayList<Long> missingIds = retCursor.getmMissingIds();
+            if (missingIds != null && missingIds.size() > 0) {
+                for (long id : missingIds) {
+                    if (querryType == QuerryType.TOP_TRACK) {
+                        SongPlayedCounter.getInstance(context).removeItem(id);
+                    } else if (querryType == QuerryType.RECENT_SONGS) {
+                        RecentStore.getRecentStoreInstance(context).removeItem(id);
+                    }
+                }
+            }
+        }
+
+        return retCursor;
+    }
+
 
 
     public static final SortedCursor makeSortedCursor(final Context context, final Cursor cursor,
@@ -53,8 +82,36 @@ public class TopTrackLoader extends SongLoader {
 
         return null;
     }
+    public static final SortedCursor makeTopTracksCursor(final Context context) {
 
-    private enum QuerryType{
+        Cursor songs = SongPlayedCounter.getInstance(context).getTopPlayedResults(Constant.NUMBER_OF_TOP_SONG);
+
+        try {
+            return makeSortedCursor(context, songs,
+                    songs.getColumnIndex(SongPlayedCounter.SongPlayCountColumns.ID));
+        } finally {
+            if (songs != null) {
+                songs.close();
+                songs = null;
+            }
+        }
+    }
+    public static final SortedCursor makeRecentTracksCursor(final Context context) {
+
+        Cursor songs = RecentStore.getRecentStoreInstance(context).queryRecentIds(null);
+
+        try {
+            return makeSortedCursor(context, songs,
+                    songs.getColumnIndex(SongPlayedCounter.SongPlayCountColumns.ID));
+        } finally {
+            if (songs != null) {
+                songs.close();
+                songs = null;
+            }
+        }
+    }
+
+    public static enum QuerryType{
         TOP_TRACK,
         RECENT_SONGS;
     }

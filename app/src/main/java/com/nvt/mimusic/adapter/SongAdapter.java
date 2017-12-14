@@ -21,6 +21,8 @@ import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.model.Song;
 import com.nvt.mimusic.wiget.CircleImageView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,7 +40,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
 
 
 
-    public SongAdapter(List<Song> songList, Activity mAppContext, long albumID) {
+    public SongAdapter(List<Song> songList, Activity mAppContext) {
         this.songList = songList;
         this.mAppContext = mAppContext;
         this.albumID = albumID;
@@ -68,7 +70,6 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         final Song songItem = songList.get(position);
         holder.txtSongTile.setText(songItem.getName());
         holder.txtArtistName.setText(songItem.getArtistName());
-
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(songItem.getAlbumId()).toString(),holder.imgSongThumbnail
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -117,6 +118,8 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         CircleImageView imgSongThumbnail;
         @BindView(R.id.songImgOptions)
         ImageView songImgOptions;
+        @BindView(R.id.txtSongCount)
+        TextView txtSongCount;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

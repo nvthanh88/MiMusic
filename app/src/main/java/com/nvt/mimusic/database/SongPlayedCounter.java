@@ -3,8 +3,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Toast;
 /**
  * Created by Admin on 12/13/17.
  */
@@ -93,7 +95,7 @@ public class SongPlayedCounter {
 
         float score = 0;
         for (int i = 0; i < Math.min(playCounts.length, NUM_WEEKS); i++) {
-            score += playCounts[i] * (i + 1);
+            score += playCounts[i] * getScoreMultiplierForWeek(i);
         }
 
         return score;
@@ -122,20 +124,21 @@ public class SongPlayedCounter {
      * Create table songplaycount with SQL Command: CREATE TABLE IF NOT EXISTS songplayedcount (songid INT UNIQUE,week INT NOT NULL,weekindex INT NOT NULL,playcountscore REAL DEFAULT 0);
      * */
     public void onCreate(final SQLiteDatabase database){
+        Log.i("PlayCount", "onCreate: ");
         StringBuilder builder = new StringBuilder();
-        builder.append("CREATE TABLE IF NOT EXISTS");
+        builder.append("CREATE TABLE IF NOT EXISTS ");
         builder.append(SongPlayCountColumns.NAME + "(");
         builder.append(SongPlayCountColumns.ID);
-        builder.append("INT UNIQUE,");
+        builder.append(" INT UNIQUE,");
         for (int i = 0; i < NUM_WEEKS; i++) {
             builder.append(getColumnNameForWeek(i));
-            builder.append("INT NOT NULL,");
+            builder.append(" INT DEFAULT 0,");
         }
 
         builder.append(SongPlayCountColumns.LAST_UPDATED_WEEK_INDEX);
-        builder.append("INT NOT NULL,");
+        builder.append(" INT NOT NULL,");
         builder.append(SongPlayCountColumns.PLAYCOUNTSCORE);
-        builder.append("REAL DEFAULT 0);");
+        builder.append(" REAL DEFAULT 0);");
         database.execSQL(builder.toString());
 
     }
@@ -160,6 +163,7 @@ public class SongPlayedCounter {
 
     }
     private void updateExistingRow(final SQLiteDatabase database, final long id, boolean bumpCount) {
+
         String stringId = String.valueOf(id);
 
         // begin the transaction
@@ -211,6 +215,7 @@ public class SongPlayedCounter {
                 }
 
                 float score = calculateScore(playCounts);
+                Log.i("PlayCount", "updateExistingRow: " + id + score);
 
                 // if the score is non-existant, then delete it
                 if (score < .01f) {

@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -32,6 +33,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import com.nvt.mimusic.constant.Constant;
 import com.nvt.mimusic.database.RecentStore;
+import com.nvt.mimusic.database.SongPlayedCounter;
 import com.nvt.mimusic.helper.MediaButtonIntentReceiver;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
 import com.nvt.mimusic.helper.Shuffler;
@@ -88,6 +90,7 @@ public class MusicService extends Service {
     private MusicPlayerHandler mPlayerHandler;
 
     private RecentStore mRecentStore;
+    private SongPlayedCounter mSongPlayedCounter;
 
 
     private static final String[] PROJECTION = new String[]{
@@ -114,6 +117,8 @@ public class MusicService extends Service {
         mPlayerHandler = new MusicPlayerHandler(this, mHandlerThread.getLooper());
         mPlayer.setHandler(mPlayerHandler);
         setUpMediaSession();
+        mRecentStore = RecentStore.getRecentStoreInstance(this);
+        mSongPlayedCounter = SongPlayedCounter.getInstance(this);
         notifyChange(META_CHANGED);
 
     }
@@ -455,10 +460,10 @@ public class MusicService extends Service {
         final Intent musicIntent = new Intent(intent);
         musicIntent.setAction(whatChanged.replace(MIMUSIC_PACKAGE_NAME, MUSIC_PACKAGE_NAME));
         sendStickyBroadcast(musicIntent);
+
         if (whatChanged.equals(META_CHANGED)) {
-
-            //mRecentStore.addSongIdToRecentList(getAudioId());
-
+            mRecentStore.addSongIdToRecentList(getAudioId());
+            mSongPlayedCounter.increaseSongCount(getAudioId());
 
         } else if (whatChanged.equals(QUEUE_CHANGED)) {
             //saveQueue(true);
@@ -958,4 +963,24 @@ public class MusicService extends Service {
 
 
     }
+    /*private void saveQueue(final boolean full) {
+        if (!mQueueIsSaveable) {
+            return;
+        }
+
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        if (full) {
+            mPlaybackStateStore.saveState(mPlaylist,
+                    mShuffleMode != SHUFFLE_NONE ? mHistory : null);
+            editor.putInt("cardid", mCardId);
+        }
+        editor.putInt("curpos", mPlayPos);
+        if (mPlayer.isInitialized()) {
+            editor.putLong("seekpos", mPlayer.position());
+        }
+        editor.putInt("repeatmode", mRepeatMode);
+        editor.putInt("shufflemode", mShuffleMode);
+        editor.apply();
+    }*/
+
 }

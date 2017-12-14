@@ -103,7 +103,7 @@ public class SortedCursor extends AbstractCursor {
             } while (mCursor.moveToNext());
             // now create the ordered positions to map to the internal cursor given the
             // external sort order
-            for (int i = 0 ; whatOrder != null && i <= whatOrder.length ; i++)
+            for (int i = 0 ; whatOrder != null && i < whatOrder.length ; i++)
             {
                 final  long id = whatOrder[i];
                 if (mMapCursorPositions.containsKey(id))

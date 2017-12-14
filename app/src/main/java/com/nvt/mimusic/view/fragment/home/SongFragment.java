@@ -11,6 +11,7 @@ import com.nvt.mimusic.adapter.SongAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.loader.SongLoader;
 import com.nvt.mimusic.helper.GridSpacingItemDecoration;
+import com.nvt.mimusic.loader.TopTrackLoader;
 import com.nvt.mimusic.model.Song;
 
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class SongFragment  extends MiBaseFragment{
     protected void initControls() {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mAppContext,1);
         songList = new ArrayList<>();
-        mSongAdapter = new SongAdapter(SongLoader.getAllSongs(mAppContext),mAppContext,albumID);
+        TopTrackLoader topTrackLoader = new TopTrackLoader(mAppContext.getApplicationContext(),TopTrackLoader.QuerryType.TOP_TRACK);
+        mSongAdapter = new SongAdapter(SongLoader.getSongListForCursor(topTrackLoader.getCursor()),mAppContext);
         songRecycleView.setLayoutManager(layoutManager);
         songRecycleView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10 ), true));
         songRecycleView.setItemAnimator(new DefaultItemAnimator());

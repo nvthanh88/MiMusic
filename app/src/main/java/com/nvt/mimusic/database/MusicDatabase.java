@@ -15,7 +15,7 @@ public class MusicDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "mimusic.db";
     private static final int DATABASE_VERSION = 4;
     private Context mContext;
-    public static MusicDatabase getMusicDatabaseInstance(final Context mContext){
+    public static synchronized MusicDatabase getMusicDatabaseInstance(final Context mContext){
         if (musicDatabaseInstance == null)
         {
             musicDatabaseInstance = new MusicDatabase(mContext.getApplicationContext());
@@ -36,6 +36,7 @@ public class MusicDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onCreate(db);
         RecentStore.getRecentStoreInstance(mContext).onCreate(db);
+        SongPlayedCounter.getInstance(mContext).onCreate(db);
 
 
 
@@ -44,13 +45,11 @@ public class MusicDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onUpgrade(db, oldVersion, newVersion);
-        RecentStore.getRecentStoreInstance(mContext).onCreate(db);
-    }
+        RecentStore.getRecentStoreInstance(mContext).onUpgrade(db, oldVersion, newVersion);}
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         MusicPlaybackState.getMusicPlaybackStateInstance(mContext).onDowngrade(db,oldVersion,newVersion);
-        RecentStore.getRecentStoreInstance(mContext).onCreate(db);
-
+        RecentStore.getRecentStoreInstance(mContext).onDownGrade(db, oldVersion, newVersion);
     }
 }

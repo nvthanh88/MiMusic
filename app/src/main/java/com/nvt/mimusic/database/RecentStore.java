@@ -38,8 +38,10 @@ public class RecentStore {
      * */
     public  void onCreate(final SQLiteDatabase sqLiteDatabase)
     {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + RecentStoreColumn.NAME + " (" + RecentStoreColumn.ID +
-                " LONG NOT NULL, "+RecentStoreColumn.TIME_PLAYED + "LONG NOT NULL);");
+        Log.i("RecentStore", "onCreate: ");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + RecentStoreColumn.NAME + " ("
+                + RecentStoreColumn.ID + " LONG NOT NULL," + RecentStoreColumn.TIME_PLAYED
+                + " LONG NOT NULL);");
 
     }
     public  void onUpgrade(final SQLiteDatabase sqLiteDatabase ,int oldversion,int newversion)
@@ -85,7 +87,7 @@ public class RecentStore {
     {
         final SQLiteDatabase sqLiteDatabase = mMusicDatabase.getReadableDatabase();
         return sqLiteDatabase.query(RecentStoreColumn.NAME,new String[]{RecentStoreColumn.TIME_PLAYED},
-                null,null,RecentStoreColumn.TIME_PLAYED,null,"ACS");
+                null,null, RecentStoreColumn.TIME_PLAYED,null," ACS");
     }
 
 
@@ -146,11 +148,22 @@ public class RecentStore {
 
         }
     }
+    public Cursor queryRecentIds(final String limit) {
+        final SQLiteDatabase database = mMusicDatabase.getReadableDatabase();
+        return database.query(RecentStoreColumn.NAME,
+                new String[]{RecentStoreColumn.ID}, null, null, null, null,
+                RecentStoreColumn.TIME_PLAYED + " DESC", limit);
+    }
+
+
+    
+
     public interface RecentStoreColumn{
         String NAME = "recent_store";
         String ID = "id";
         String TIME_PLAYED = "time_played" ;
     }
+
 
 
 }

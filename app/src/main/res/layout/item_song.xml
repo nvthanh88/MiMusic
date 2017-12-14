@@ -49,6 +49,13 @@
                     android:text="@string/txtArtist"
                     android:textSize="@dimen/text_smaller"
                     />
+                <TextView
+                    android:id="@+id/txtSongCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Play: 100"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_smallest"/>
             </LinearLayout>
             <ImageView
                 android:id="@+id/songImgOptions"
