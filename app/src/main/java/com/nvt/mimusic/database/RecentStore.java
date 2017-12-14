@@ -10,6 +10,10 @@ import android.util.Log;
  * Created by Admin on 11/2/17.
  */
 
+/**
+ * Recent Store Table
+ * */
+
 public class RecentStore {
 
     private static final int MAX_ITEMS_IN_DB = 100;
@@ -27,6 +31,11 @@ public class RecentStore {
         }
         return recentStoreInstance;
     }
+
+    /**
+     * On create SQL Querry : CREATE TABLE IF NOT EXISTS recent_store (id LONG NOT NULL,time_played LONG NOT NULL);
+     *
+     * */
     public  void onCreate(final SQLiteDatabase sqLiteDatabase)
     {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + RecentStoreColumn.NAME + " (" + RecentStoreColumn.ID +
@@ -43,21 +52,35 @@ public class RecentStore {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+RecentStoreColumn.NAME);
         onCreate(sqLiteDatabase);
     }
+    /**
+     * Remove when history over max history storage
+     * */
     public void removeItem(final long songId){
         final SQLiteDatabase sqLiteDatabase = mMusicDatabase.getWritableDatabase();
         sqLiteDatabase.delete(RecentStoreColumn.NAME,RecentStoreColumn.ID+ "= ?",new String[]{String.valueOf(songId)});
 
     }
+    /**
+     * Delete when user clear hostory
+     * */
     public void deleteAll(){
         final SQLiteDatabase sqLiteDatabase = mMusicDatabase.getWritableDatabase();
         sqLiteDatabase.delete(RecentStoreColumn.NAME,null,null);
     }
+    /**
+     * Query to get id with selection argument = id
+     * */
     private Cursor queryRecentId(final String limit){
         final SQLiteDatabase sqLiteDatabase = mMusicDatabase.getReadableDatabase();
         return sqLiteDatabase.query(RecentStoreColumn.NAME,new String[]{RecentStoreColumn.ID}
         ,null ,null,null,null,null,limit);
 
     }
+    /**
+     * Query to get last id with selection argument = time search and sorted
+     * */
+
+
     private Cursor queryLastId()
     {
         final SQLiteDatabase sqLiteDatabase = mMusicDatabase.getReadableDatabase();

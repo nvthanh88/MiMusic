@@ -18,6 +18,21 @@ import java.util.LinkedList;
 public class MusicPlaybackState {
     private static MusicPlaybackState musicPlaybackStateInstance = null;
     private MusicDatabase mMusicDatabase;
+    public class PlaybackQueueColumns {
+
+        public static final String NAME = "playbackqueue";
+        public static final String TRACK_ID = "trackid";
+        public static final String SOURCE_ID = "sourceid";
+        public static final String SOURCE_TYPE = "sourcetype";
+        public static final String SOURCE_POSITION = "sourceposition";
+    }
+
+    public class PlaybackHistoryColumns {
+
+        public static final String NAME = "playbackhistory";
+
+        public static final String POSITION = "position";
+    }
 
     public MusicPlaybackState(final Context context) {
         mMusicDatabase = MusicDatabase.getMusicDatabaseInstance(context);
@@ -28,6 +43,11 @@ public class MusicPlaybackState {
             musicPlaybackStateInstance = new MusicPlaybackState(context);
         return musicPlaybackStateInstance;
     }
+
+    /**
+     * On create SQL Querry : CREATE TABLE IF NOT EXISTS playbackqueue (trackid LONG NOT NULL,sourceid LONG NOT NULL,sourcetype INT NOT NULL,sourceposition INT NOT NULL);
+     *                        CREATE TABLE IF NOT EXISTS playbackhistory (position INT NOT NULL);
+     * */
     public void onCreate(final SQLiteDatabase db) {
         StringBuilder builder = new StringBuilder();
         builder.append("CREATE TABLE IF NOT EXISTS ");
@@ -58,20 +78,28 @@ public class MusicPlaybackState {
 
         db.execSQL(builder.toString());
     }
-
+    /**
+     * On Upgrade create new Database
+     * */
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         // this table was created in version 2 so call the onCreate method if we hit that scenario
         if (oldVersion < 2 && newVersion >= 2) {
             onCreate(db);
         }
     }
-
+    /**
+     * On Downgrade Drop Database
+     * */
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + PlaybackQueueColumns.NAME);
         db.execSQL("DROP TABLE IF EXISTS " + PlaybackHistoryColumns.NAME);
         onCreate(db);
     }
+
+    /**
+     * Get playback track list  (public long mId; public long mSourceId; public IdType mSourceType;public int mSourcePosition;)
+     *      * */
     public ArrayList<MusicPlaybackTrack> getQueue() {
         ArrayList<MusicPlaybackTrack> results = new ArrayList<>();
 
@@ -80,6 +108,9 @@ public class MusicPlaybackState {
             cursor = mMusicDatabase.getReadableDatabase().query(PlaybackQueueColumns.NAME, null,
                     null, null, null, null, null);
 
+            /**
+             * When queried data, add to array list
+             * */
             if (cursor != null && cursor.moveToFirst()) {
                 results.ensureCapacity(cursor.getCount());
 
@@ -97,7 +128,9 @@ public class MusicPlaybackState {
             }
         }
     }
-
+    /**
+     * Get history
+     *      * */
     public LinkedList<Integer> getHistory(final int playlistSize) {
         LinkedList<Integer> results = new LinkedList<>();
 
@@ -125,20 +158,6 @@ public class MusicPlaybackState {
     }
 
 
-    public class PlaybackQueueColumns {
 
-        public static final String NAME = "playbackqueue";
-        public static final String TRACK_ID = "trackid";
-        public static final String SOURCE_ID = "sourceid";
-        public static final String SOURCE_TYPE = "sourcetype";
-        public static final String SOURCE_POSITION = "sourceposition";
-    }
-
-    public class PlaybackHistoryColumns {
-
-        public static final String NAME = "playbackhistory";
-
-        public static final String POSITION = "position";
-    }
 
 }
