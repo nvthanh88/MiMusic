@@ -27,4 +27,20 @@ public class LoginFragment extends MiBaseFragment {
     protected void initControls() {
 
     }
+
+
+    @Override
+    public void restartLoader() {
+
+    }
+
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+
+    }
 }

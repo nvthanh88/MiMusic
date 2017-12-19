@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.nvt.mimusic.listener.MediaStateListener;
+import com.nvt.mimusic.view.activity.MiBaseActivity;
 import com.nvt.mimusic.view.activity.MiMainActivity;
 import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
 
@@ -18,7 +21,7 @@ import android.app.Fragment;
  * Created by Admin on 10/16/17.
  */
 
-public abstract class MiBaseFragment extends Fragment {
+public abstract class MiBaseFragment extends Fragment implements MediaStateListener {
     protected MiMainActivity mActivity;
     protected Activity mAppContext;
     protected View mView;
@@ -33,7 +36,10 @@ public abstract class MiBaseFragment extends Fragment {
         if( mActivity!= null)
         {
             mAppContext = getActivity();
+
         }
+
+
     }
 
     @Nullable
@@ -125,5 +131,6 @@ public abstract class MiBaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initData();
+
     }
 }

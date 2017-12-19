@@ -286,4 +286,20 @@ public class MusicPlayer {
             mMiCoreService = null;
         }
     }
+    /**
+    * Play or Pause
+    * */
+    public static void playOrPause() {
+        try {
+            if (mMiCoreService != null) {
+                if (mMiCoreService.isPlaying()) {
+                    mMiCoreService.pause();
+                } else {
+                    mMiCoreService.play();
+                }
+            }
+        } catch (final Exception ignored) {
+        }
+    }
+
 }

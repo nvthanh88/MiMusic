@@ -23,7 +23,9 @@
         android:layout_height="wrap_content"
         android:weightSum="12"
         android:background="@color/cmn_gray_bg">
+
         <ScrollView
+            android:fastScrollAlwaysVisible="false"
             android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_weight="12"

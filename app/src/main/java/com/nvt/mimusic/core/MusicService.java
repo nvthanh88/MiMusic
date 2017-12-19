@@ -41,6 +41,7 @@ import com.nvt.mimusic.helper.Shuffler;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static com.nvt.mimusic.constant.Constant.META_CHANGED;
 
@@ -65,12 +66,12 @@ public class MusicService extends Service {
     private static final int REPEAT_ALL = 2;
     private static boolean mServiceInUse = false;
     private final IBinder mBinder = new ServiceStub(this);
-
+    private static LinkedList<Integer> mHistory = new LinkedList<>();
     private HandlerThread mHandlerThread;
     private AudioManager mAudioManager;
     private MultiPlayer mPlayer;
     private Handler mHandler;
-
+    private static final long REWIND_INSTEAD_PREVIOUS_THRESHOLD = 3000;
     protected ArrayList<MusicPlaybackTrack> mPlaylist = new ArrayList<MusicPlaybackTrack>(100);
     public Cursor mCursor;
     public Cursor mAlbumCursor;
@@ -208,7 +209,7 @@ public class MusicService extends Service {
                 position = mPlayer.duration();
             }
             long result = mPlayer.seek(position);
-            //notifyChange(POSITION_CHANGED);
+            notifyChange(POSITION_CHANGED);
             return result;
         }
         return -1;
@@ -982,5 +983,73 @@ public class MusicService extends Service {
         editor.putInt("shufflemode", mShuffleMode);
         editor.apply();
     }*/
+    /**
+     * Pause
+     * */
+    public void pause() {
+        if (F) Log.d(TAG, "Pausing playback");
+        synchronized (this) {
+
+            if (mIsSupposedToBePlaying) {
+                final Intent intent = new Intent(
+                        AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+                intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, getAudioSessionId());
+                intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+                sendBroadcast(intent);
+
+                mPlayer.pause();
+                notifyChange(META_CHANGED);
+                mIsSupposedToBePlaying = false;
+            }
+        }
+    }
+    public int getPreviousPlayPosition(boolean removeFromHistory) {
+        synchronized (this) {
+            if (mShuffleMode == SHUFFLE_NORMAL) {
+
+                final int histsize = mHistory.size();
+                if (histsize == 0) {
+                    return -1;
+                }
+                final Integer pos = mHistory.get(histsize - 1);
+                if (removeFromHistory) {
+                    mHistory.remove(histsize - 1);
+                }
+                return pos.intValue();
+            } else {
+                if (mPlayPos > 0) {
+                    return mPlayPos - 1;
+                } else {
+                    return mPlaylist.size() - 1;
+                }
+            }
+        }
+    }
+    public void prev(boolean forcePrevious) {
+        synchronized (this) {
+            boolean goPrevious = repeatMode != REPEAT_ONE &&
+                    (position() < REWIND_INSTEAD_PREVIOUS_THRESHOLD || forcePrevious);
+
+            if (goPrevious) {
+                if (F) Log.d(TAG, "Going to previous track");
+                int pos = getPreviousPlayPosition(true);
+
+                if (pos < 0) {
+                    return;
+                }
+                mNextPlayPos = mPlayPos;
+                mPlayPos = pos;
+                stop(false);
+                openCurrentAndMaybeNext(false);
+                play(false);
+                notifyChange(META_CHANGED);
+            } else {
+                if (F) Log.d(TAG, "Going to beginning of track");
+                seek(0);
+                play(false);
+            }
+        }
+    }
+
 
 }

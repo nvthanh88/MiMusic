@@ -12,13 +12,14 @@
     tools:context="com.nvt.mimusic.view.activity.MiMainActivity"
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
-        android:id="@+id/homeTab"
+
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal"
         >
         <TextView
+            android:id="@+id/homeTab"
             android:background="@drawable/ic_home"
             android:textColor="@color/cmn_white"
             android:layout_height="wrap_content"
@@ -27,35 +28,35 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/genericTab"
         style="@style/Layout.FullWidthHeight"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/genericTab"
             android:textColor="@color/cmn_white"
             style="@style/Layout.WrapWidthHeight"
             android:background="@drawable/ic_generics"
             />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/nowPlayingTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:orientation="horizontal">
         <TextView
             android:textColor="@color/cmn_white"
-
+            android:id="@+id/nowPlayingTab"
             style="@style/Layout.WrapWidthHeight"
             android:background="@drawable/ic_play"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/searchTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/searchTab"
+
             android:textColor="@color/cmn_white"
             style="@style/Layout.WrapWidthHeight"
             android:background="@drawable/ic_search"/>
@@ -63,12 +64,12 @@
     </LinearLayout>
     <LinearLayout
 
-        android:id="@+id/menuTab"
         style="@style/Layout.FullWidthHeight.Center"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/menuTab"
             android:textColor="@color/cmn_white"
             style="@style/Layout.WrapWidthHeight"
             android:background="@drawable/ic_menu"/>

@@ -148,5 +148,8 @@ public  final class MultiPlayer implements MediaPlayer.OnErrorListener, MediaPla
     public void setHandler(final Handler handler) {
         mHandler = handler;
     }
+    public void pause(){
+        mCurrentPlayer.pause();
+    }
 
 }

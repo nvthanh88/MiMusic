@@ -38,12 +38,20 @@ public class WelcomeFragment extends MiBaseFragment {
     protected void initControls() {
 
     }
-    /*@OnClick(R.id.btnHaveAccount)
-    public void openLoginFragment(){
-        mActivity.openScreen(ScreenIDs.ID.LOGIN,LoginFragment.class,null,false);
+
+
+    @Override
+    public void restartLoader() {
+
     }
-    @OnClick(R.id.btnRegister)
-    public void openRegisterFragment(){
-        mActivity.openScreen(ScreenIDs.ID.REGISTER,RegisterFragment.class,null,false);
-    }*/
+
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+
+    }
 }

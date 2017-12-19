@@ -132,4 +132,20 @@ public class AlbumDetailsFragment extends MiBaseFragment {
         albumDetailsInfo.setText(album.getArtistName() );
 
     }
+
+
+    @Override
+    public void restartLoader() {
+
+    }
+
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+
+    }
 }

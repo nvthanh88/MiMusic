@@ -11,16 +11,39 @@
         android:layout_width="match_parent"
         android:layout_height="405dp"
         android:scaleType="centerCrop">
+
         <ImageView
             android:id="@+id/nowPlayingBackground"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="378dp"
+            android:background="@color/cmn_transparent"
+            />
+        <TextView
+            android:id="@+id/nowPlayingArtistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Artist Name"
+            android:textColor="@color/cmn_black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_normal"
+            android:layout_marginTop="@dimen/padding_normal"/>
+        <TextView
+            android:id="@+id/nowPlayingSongName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Song Name"
+            android:textColor="@color/cmn_accent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_normal"
+            android:layout_marginTop="@dimen/padding_huge"/>
         <android.support.percent.PercentRelativeLayout
             android:scaleType="centerCrop"
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="378dp"
-            android:background="@color/cmn_white"
+            android:background="@color/cmn_white_transparent"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 
@@ -33,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content">
                 <com.nvt.mimusic.wiget.CircleImageView
-                    android:id="@+id/albumCover"
+                    android:id="@+id/nowPlayingAlbumCover"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
@@ -57,8 +80,21 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="@dimen/padding_huge"
                 android:orientation="horizontal"
-                android:gravity="center">
-
+                android:gravity="center"
+                android:weightSum="7">
+                <net.steamcrafted.materialiconlib.MaterialIconView
+                    android:id="@+id/btnRepeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:materialIcon="repeat"
+                    />
+                <net.steamcrafted.materialiconlib.MaterialIconView
+                    android:id="@+id/btnPrev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:materialIcon="skip_previous"
+                    android:layout_weight="1"
+                    />
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/playFloatingBtn"
                     android:layout_width="@dimen/btn_height"
@@ -66,8 +102,21 @@
                     android:clickable="true"
                     android:scaleType="fitCenter"
                     android:tag="bg_tint_accent_color"
+                    android:layout_weight="5"
                    />
+                <net.steamcrafted.materialiconlib.MaterialIconView
+                    android:id="@+id/btnNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:materialIcon="skip_next"
+                    android:layout_weight="1"
 
+                    />
+                <net.steamcrafted.materialiconlib.MaterialIconView
+                    android:id="@+id/btnShuffle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:materialIcon="shuffle"/>
             </LinearLayout>
             <com.nvt.mimusic.wiget.CircularSeekBar
                 android:id="@+id/song_progress_circular"
@@ -75,14 +124,14 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
-                android:maxHeight="1dp"
-                android:progress="30"
-                app:circle_color="#33000000"
-                app:circle_progress_color="?attr/accentColor"
+                android:maxHeight="30dp"
+                android:progress="1"
+                app:circle_color="@color/cmn_white"
+                app:circle_progress_color="@color/cmn_accent"
                 app:circle_stroke_width="2"
                 app:layout_heightPercent="60%"
                 app:layout_widthPercent="60%"
-                app:pointer_color="?attr/accentColor"
+                app:pointer_color="@color/colorPrimaryDark"
                 app:pointer_halo_border_width="1.5"
                 app:pointer_halo_color="?attr/accentColor"
                 app:pointer_halo_width="0.5" />
@@ -94,17 +143,18 @@
             android:id="@+id/txtUpNext"
             android:layout_width="60dp"
             android:layout_height="25dp"
-            android:text="Up next: "
+            android:text="Play list: "
             android:gravity="center"
             android:background="@drawable/upnext_text_bg"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_centerInParent="true"
+            android:textColor="@color/cmn_black"
             android:textStyle="bold"
             android:textSize="@dimen/text_small"/>
     </RelativeLayout>
         <android.support.v7.widget.RecyclerView
-            android:background="@color/cmn_white"
+            android:background="@color/cmn_transparent"
             android:id="@+id/recycleViewNowPlayingPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

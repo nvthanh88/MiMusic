@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     style="@style/Layout.FullWidth"
-    android:background="@color/cmn_white">
+    android:background="@color/cmn_transparent">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -11,6 +11,7 @@
         android:layout_margin="@dimen/padding_smaller"
         android:elevation="3dp"
         app:cardCornerRadius="@dimen/padding_smaller"
+        app:cardBackgroundColor="@color/cardview_light_background"
         >
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -28,6 +29,7 @@
                 android:scaleType="centerCrop"
                 android:layout_marginStart="@dimen/padding_normal" />
             <LinearLayout
+                android:id="@+id/llSongInfo"
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +54,15 @@
                     android:textSize="@dimen/text_smaller"
                     />
             </LinearLayout>
+            <com.nvt.mimusic.wiget.MusicVisualizer
+                android:id="@+id/musicVisualizer"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/padding_huge"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:layout_marginLeft="@dimen/padding_small"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

@@ -1,33 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     style="@style/Layout.FullWidthHeight"
     android:background="@color/cmn_white"
     android:paddingTop="@dimen/padding_normal"
     android:paddingLeft="@dimen/padding_smaller"
     android:paddingRight="@dimen/padding_smaller">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_large"
-        android:text="@string/txtRecycleSongText"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/cmn_black"
-        android:textStyle="bold"/>
+    <LinearLayout
+        android:id="@+id/llFragmentTitle"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_large"
+            android:text="@string/txtRecycleSongText"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/cmn_black"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/txtRecycleLoadMoreSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_normal"
+
+    </LinearLayout>
+
+    <com.nvt.mimusic.wiget.FastScroller
+        android:layout_below="@+id/llFragmentTitle"
         android:layout_alignParentRight="true"
-        android:text="@string/txtRecycleLoadMoreString"
-        android:textColor="@color/colorAccent"/>
+        android:layout_marginRight="@dimen/padding_small"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content">
+    </com.nvt.mimusic.wiget.FastScroller>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/txtRecycleLoadMoreSong"
+        android:layout_below="@+id/llFragmentTitle"
         android:id="@+id/songRecycleView"
-        android:layout_width="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:fadeScrollbars="true"

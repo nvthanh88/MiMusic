@@ -296,8 +296,8 @@ public class PlayPauseButton extends View {
      * @param color セットする色
      */
     public void setColor(int color) {
-        mBackgroundColor = color;
-        mPaint.setColor(mBackgroundColor);
+        mBackgroundColor = getResources().getColor(color);
+        mPaint.setColor(getResources().getColor(color));
         invalidate();
     }
 

@@ -8,16 +8,56 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.nvt.mimusic.core.MusicPlayer;
+import com.nvt.mimusic.model.Song;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Admin on 12/12/17.
  */
 
 public class NowPlayingSongLoader {
+    private static NowPlayingCursor mCursor;
 
-    public static  class NowPlayingCursor extends AbstractCursor{
+    public static List<Song> getQueueSongs(Context context) {
+
+        final ArrayList<Song> mSongList = new ArrayList<>();
+        mCursor = new NowPlayingCursor(context);
+
+        if (mCursor != null && mCursor.moveToFirst()) {
+            do {
+
+                final long id = mCursor.getLong(0);
+
+                final String songName = mCursor.getString(1);
+
+                final String artist = mCursor.getString(2);
+
+                final long albumId = mCursor.getLong(3);
+
+                final String album = mCursor.getString(4);
+
+                final int duration = mCursor.getInt(5);
+
+                final long artistid = mCursor.getInt(7);
+
+                final int tracknumber = mCursor.getInt(6);
+
+                final Song song = new Song(songName,id,artist,artistid, album,  albumId, tracknumber,   duration);
+
+                mSongList.add(song);
+            } while (mCursor.moveToNext());
+        }
+        if (mCursor != null) {
+            mCursor.close();
+            mCursor = null;
+        }
+        return mSongList;
+    }
+
+    public static  class NowPlayingCursor extends AbstractCursor {
 
 
         private static final String[] PROJECTION = new String[]{
@@ -56,6 +96,7 @@ public class NowPlayingSongLoader {
             this.mContext = mContext;
             makeNowPlayingCursor();
         }
+
         private void makeNowPlayingCursor() {
             mQueueCursor = null;
             mNowPlaying = MusicPlayer.getQueue();
@@ -116,47 +157,119 @@ public class NowPlayingSongLoader {
 
         @Override
         public int getCount() {
-            return 0;
+            return mSize;
         }
+
+        @Override
+        public boolean onMove(final int oldPosition, final int newPosition) {
+            if (oldPosition == newPosition) {
+                return true;
+            }
+
+            if (mNowPlaying == null || mCursorIndexes == null || newPosition >= mNowPlaying.length) {
+                return false;
+            }
+
+            final long id = mNowPlaying[newPosition];
+            final int cursorIndex = Arrays.binarySearch(mCursorIndexes, id);
+            mQueueCursor.moveToPosition(cursorIndex);
+            mCurPos = newPosition;
+            return true;
+        }
+
+        @Override
+        public String getString(final int column) {
+            try {
+                return mQueueCursor.getString(column);
+            } catch (final Exception ignored) {
+                onChange(true);
+                return "";
+            }
+        }
+
+
+        @Override
+        public short getShort(final int column) {
+            return mQueueCursor.getShort(column);
+        }
+
+
+        @Override
+        public int getInt(final int column) {
+            try {
+                return mQueueCursor.getInt(column);
+            } catch (final Exception ignored) {
+                onChange(true);
+                return 0;
+            }
+        }
+
+
+        @Override
+        public long getLong(final int column) {
+            try {
+                return mQueueCursor.getLong(column);
+            } catch (final Exception ignored) {
+                onChange(true);
+                return 0;
+            }
+        }
+
+
+        @Override
+        public float getFloat(final int column) {
+            return mQueueCursor.getFloat(column);
+        }
+
+
+        @Override
+        public double getDouble(final int column) {
+            return mQueueCursor.getDouble(column);
+        }
+
+
+        @Override
+        public int getType(final int column) {
+            return mQueueCursor.getType(column);
+        }
+
+        @Override
+        public boolean isNull(final int column) {
+            return mQueueCursor.isNull(column);
+        }
+
 
         @Override
         public String[] getColumnNames() {
-            return new String[0];
+            return PROJECTION;
+        }
+
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public void deactivate() {
+            if (mQueueCursor != null) {
+                mQueueCursor.deactivate();
+            }
         }
 
         @Override
-        public String getString(int column) {
-            return null;
+        public boolean requery() {
+            makeNowPlayingCursor();
+            return true;
         }
 
-        @Override
-        public short getShort(int column) {
-            return 0;
-        }
 
         @Override
-        public int getInt(int column) {
-            return 0;
-        }
-
-        @Override
-        public long getLong(int column) {
-            return 0;
-        }
-
-        @Override
-        public float getFloat(int column) {
-            return 0;
-        }
-
-        @Override
-        public double getDouble(int column) {
-            return 0;
-        }
-
-        @Override
-        public boolean isNull(int column) {
-            return false;
+        public void close() {
+            try {
+                if (mQueueCursor != null) {
+                    mQueueCursor.close();
+                    mQueueCursor = null;
+                }
+            } catch (final Exception close) {
+            }
+            super.close();
         }
     }
 }

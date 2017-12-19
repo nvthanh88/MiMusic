@@ -70,15 +70,15 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     @BindView(R.id.quickPlayingControl)
     RelativeLayout quickPlayingControl;
     @BindView(R.id.homeTab)
-    LinearLayout homeTab;
+    TextView homeTab;
     @BindView(R.id.genericTab)
-    LinearLayout genericTab;
+    TextView genericTab;
     @BindView(R.id.nowPlayingTab)
-    LinearLayout nowPlayingTab;
+    TextView nowPlayingTab;
     @BindView(R.id.searchTab)
-    LinearLayout searchTab;
+    TextView searchTab;
     @BindView(R.id.menuTab)
-    LinearLayout menuTab;
+    TextView menuTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +87,7 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
         ButterKnife.bind(this);
         setSupportActionBar(toolbarTop);
         PermissionRequest.init(getApplicationContext());
+
         /**
          * Check OS Version > 6 ask for permission and else Todo smt
          * */
@@ -182,14 +183,17 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     }
     @Override
     public void onMetaChanged() {
+        super.onMetaChanged();
         updateState();
         updateNowPlayingCard();
+
     }
 
     /**
      * Update now playing card
      * */
     public void updateState(){
+
         if(MusicPlayer.isPlaying()) {
             if (!mPlayPauseButton.isPlayed()) {
                 mPlayPauseButton.setPlayed(true);
@@ -272,7 +276,7 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     }
     @OnClick(R.id.quickPlayingControl)
         public void openNowPlaying() {
-        NavigationUtils.navigateToNowPlaying(ScreenIDs.ID.NOW_PLAYING,this);
+        NavigationUtils.navigateToNowPlaying(this);
     }
     public  void isShowQuickControl(boolean isShow)
     {
@@ -280,12 +284,15 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     }
     @OnClick(R.id.homeTab)
     public void openHomeTab(){
-        NavigationUtils.navigateToHome(ScreenIDs.ID.HOME,this);
+        NavigationUtils.navigateToHome(this);
+        setHightLightTab(ScreenIDs.ID.HOME);
     }
 
     @OnClick(R.id.nowPlayingTab)
     public void openNowPlayingFromTab() {
-        NavigationUtils.navigateToNowPlaying(ScreenIDs.ID.NOW_PLAYING,this);
+        NavigationUtils.navigateToNowPlaying(this);
+        setHightLightTab(ScreenIDs.ID.NOW_PLAYING);
+
     }
 
 
@@ -293,6 +300,40 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
        switch (tab)
        {
            case HOME:
+               homeTab.setBackgroundResource(R.drawable.ic_home_pressed);
+               menuTab.setBackgroundResource(R.drawable.ic_menu);
+               searchTab.setBackgroundResource(R.drawable.ic_search);
+               nowPlayingTab.setBackgroundResource(R.drawable.ic_play);
+               genericTab.setBackgroundResource(R.drawable.ic_generics);
+               break;
+           case NOW_PLAYING:
+               nowPlayingTab.setBackgroundResource(R.drawable.ic_play_pressed);
+               homeTab.setBackgroundResource(R.drawable.ic_home);
+               menuTab.setBackgroundResource(R.drawable.ic_menu);
+               searchTab.setBackgroundResource(R.drawable.ic_search);
+               genericTab.setBackgroundResource(R.drawable.ic_generics);
+               break;
+           case MENU_TAB:
+               homeTab.setBackgroundResource(R.drawable.ic_home);
+               menuTab.setBackgroundResource(R.drawable.ic_menu_pressed);
+               searchTab.setBackgroundResource(R.drawable.ic_search);
+               nowPlayingTab.setBackgroundResource(R.drawable.ic_play);
+               genericTab.setBackgroundResource(R.drawable.ic_generics);
+               break;
+           case GENERICS_TAB:
+               homeTab.setBackgroundResource(R.drawable.ic_home);
+               menuTab.setBackgroundResource(R.drawable.ic_menu);
+               searchTab.setBackgroundResource(R.drawable.ic_search);
+               nowPlayingTab.setBackgroundResource(R.drawable.ic_play);
+               genericTab.setBackgroundResource(R.drawable.ic_generics_pressed);
+               break;
+           case SEARCH_TAB:
+               homeTab.setBackgroundResource(R.drawable.ic_home);
+               menuTab.setBackgroundResource(R.drawable.ic_menu);
+               searchTab.setBackgroundResource(R.drawable.ic_search_pressed);
+               nowPlayingTab.setBackgroundResource(R.drawable.ic_play);
+               genericTab.setBackgroundResource(R.drawable.ic_generics);
+               break;
        }
     }
 

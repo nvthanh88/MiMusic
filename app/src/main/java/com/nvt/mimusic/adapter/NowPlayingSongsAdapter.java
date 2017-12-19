@@ -18,6 +18,7 @@ import com.nvt.mimusic.R;
 import com.nvt.mimusic.core.MiApplication;
 import com.nvt.mimusic.core.MusicPlayer;
 import com.nvt.mimusic.model.Song;
+import com.nvt.mimusic.wiget.MusicVisualizer;
 
 import java.util.List;
 
@@ -74,10 +75,13 @@ public class NowPlayingSongsAdapter extends RecyclerView.Adapter<NowPlayingSongs
                         super.onLoadingCancelled(imageUri, view);
                     }
                 });
-        if (MusicPlayer.getCurrentAlbumId() == queueSong.getSongId())
-        {
 
-        }
+            holder.musicVisualizer.setColor(R.color.colorAccent);
+            if (MusicPlayer.isPlaying())
+            holder.musicVisualizer.setVisibility(MusicPlayer.getCurrentAudioId() == queueSong.getSongId() ? View.VISIBLE : View.GONE);
+            else
+                holder.musicVisualizer.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -92,7 +96,8 @@ public class NowPlayingSongsAdapter extends RecyclerView.Adapter<NowPlayingSongs
         TextView queuePlayingTxtArtistName;
         @BindView(R.id.queuePlayingTxtSongTile)
         TextView queuePlayingTxtSongTile;
-
+        @BindView(R.id.musicVisualizer)
+        MusicVisualizer musicVisualizer;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

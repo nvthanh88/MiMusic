@@ -70,6 +70,7 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         final Song songItem = songList.get(position);
         holder.txtSongTile.setText(songItem.getName());
         holder.txtArtistName.setText(songItem.getArtistName());
+        holder.songPosition.setText(String.valueOf(position + 1));
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(songItem.getAlbumId()).toString(),holder.imgSongThumbnail
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -118,8 +119,8 @@ public class SongAdapter  extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
         CircleImageView imgSongThumbnail;
         @BindView(R.id.songImgOptions)
         ImageView songImgOptions;
-        @BindView(R.id.txtSongCount)
-        TextView txtSongCount;
+        @BindView(R.id.songPosition)
+        TextView songPosition;
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

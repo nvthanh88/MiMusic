@@ -14,7 +14,7 @@
         android:layout_above="@id/qcAlbumArt"
         android:progress="30"
         android:tag="tint_accent_color"
-        android:backgroundTint="@color/cmn_transparent"/>
+        android:background="@color/cmn_white"/>
     <com.nvt.mimusic.wiget.CircleImageView
         android:id="@+id/qcAlbumArt"
         android:layout_width="40dp"
@@ -74,6 +74,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="center"
+            android:background="@color/colorAccent"
             />
 
         <View

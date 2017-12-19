@@ -84,7 +84,7 @@ public class NavigationUtils {
     public static void navigateToPlaylistDetail(ScreenIDs.ID tab,Activity context, String action, long firstAlbumID, String playlistName, int foregroundcolor, long playlistID, ArrayList<Pair> transitionViews) {
 
     }
-    public static void navigateToNowPlaying(ScreenIDs.ID tab,Activity context) {
+    public static void navigateToNowPlaying(Activity context) {
         Log.i(TAG, "navigateToNowPlaying: ");
         FragmentManager fragmentManager = context.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -94,7 +94,7 @@ public class NavigationUtils {
         fragmentTransaction.replace(R.id.frameMainContent,mFragment);
         fragmentTransaction.addToBackStack(null).commit();
     }
-    public static void navigateToHome(ScreenIDs.ID tab , Activity context)
+    public static void navigateToHome( Activity context)
     {
         Log.i(TAG, "navigateToHome: ");
         FragmentManager fragmentManager = context.getFragmentManager();
