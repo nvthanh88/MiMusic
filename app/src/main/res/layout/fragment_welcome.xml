@@ -20,7 +20,7 @@
             android:textAllCaps="false"
             android:layout_above="@+id/btnHaveAccount"
             android:layout_marginTop="@dimen/padding_medium"
-            android:background="@color/colorAccent"
+            android:background="@color/cmn_accent"
             android:textColor="@color/cmn_white"
             />
 

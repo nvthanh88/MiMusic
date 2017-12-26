@@ -21,7 +21,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -30,12 +31,14 @@ import android.view.View;
 
 
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.base.fragment.MiBaseFragment;
+import com.nvt.mimusic.constant.Constant;
 import com.nvt.mimusic.constant.ScreenIDs;
 import com.nvt.mimusic.core.MiApplication;
+import com.nvt.mimusic.view.activity.MiMainActivity;
 import com.nvt.mimusic.view.fragment.album.AlbumDetailsFragment;
+import com.nvt.mimusic.view.fragment.all_song.AllSongFragment;
 import com.nvt.mimusic.view.fragment.home.AlbumFragment;
-import com.nvt.mimusic.view.fragment.home.SongFragment;
+import com.nvt.mimusic.view.fragment.home.TopSongFragment;
 import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
 
 import java.util.ArrayList;
@@ -99,12 +102,29 @@ public class NavigationUtils {
         Log.i(TAG, "navigateToHome: ");
         FragmentManager fragmentManager = context.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment mSongFragment = new SongFragment();
+        Fragment mSongFragment = new TopSongFragment();
         Fragment mAlbumFragment = new AlbumFragment();
         fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameMainContent));
         fragmentTransaction.replace(R.id.frameSongContent,mSongFragment);
         fragmentTransaction.replace(R.id.frameAlbumContent,mAlbumFragment);
         fragmentTransaction.addToBackStack(null).commit();
+
+    }
+    public static void navigateToSearch(Activity context) {
+        Log.i(TAG, "navigateToNowPlaying: ");
+        FragmentManager fragmentManager = context.getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment mFragment = new AllSongFragment();
+        fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameSongContent));
+        fragmentTransaction.hide(fragmentManager.findFragmentById(R.id.frameAlbumContent));
+        fragmentTransaction.replace(R.id.frameMainContent,mFragment);
+        fragmentTransaction.addToBackStack(null).commit();
+    }
+    public static Intent getNowPlayingIntent(Context context) {
+
+        final Intent intent = new Intent(context, MiMainActivity.class);
+        intent.setAction(Constant.NAVIGATE_NOWPLAYING);
+        return intent;
     }
 
 

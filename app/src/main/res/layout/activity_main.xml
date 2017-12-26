@@ -23,13 +23,11 @@
         android:layout_height="wrap_content"
         android:weightSum="12"
         android:background="@color/cmn_gray_bg">
-
         <ScrollView
-            android:fastScrollAlwaysVisible="false"
-            android:id="@+id/mainContent"
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_weight="12"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="12">
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,6 +37,7 @@
                     android:layout_width="match_parent" />
             </FrameLayout>
         </ScrollView>
+
             <include
             layout="@layout/bottom_nowplaying_card"
             android:layout_height="60dp"

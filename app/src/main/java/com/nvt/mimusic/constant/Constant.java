@@ -16,4 +16,9 @@ public class Constant {
 
     //Index
     public static final int NUMBER_OF_TOP_SONG = 10;
+    public static final String NAVIGATE_NOWPLAYING ="navigate_nowplaying";
+    public static final String PREVIOUS_ACTION = "com.nvt.mimusic.previous";
+    public static final String PREVIOUS_FORCE_ACTION = "com.nvt.mimusic.previous.force";
+    public static final String NEXT_ACTION = "com.nvt.mimusic.next";
+    public static final String TOGGLEPAUSE_ACTION = "com.nvt.mimusic.togglepause";
 }

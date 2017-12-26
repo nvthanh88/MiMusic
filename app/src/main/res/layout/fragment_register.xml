@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:textColor="@color/cmn_white"
-        android:background="@color/colorAccent"
+        android:background="@color/cmn_accent"
         android:text="@string/btnCreateAccountText"
         android:layout_marginTop="@dimen/padding_huge"/>
 

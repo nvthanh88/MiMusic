@@ -51,7 +51,6 @@ public class NowPlayingSongsAdapter extends RecyclerView.Adapter<NowPlayingSongs
         Song queueSong = songList.get(position);
         holder.queuePlayingTxtArtistName.setText(queueSong.getArtistName());
         holder.queuePlayingTxtSongTile.setText(queueSong.getName());
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(queueSong.getAlbumId()).toString(),holder.queuePlayingImgSongThumbnail
                 ,new DisplayImageOptions.Builder().cacheInMemory(true)
                         .showImageOnFail(R.drawable.album1)
@@ -76,7 +75,7 @@ public class NowPlayingSongsAdapter extends RecyclerView.Adapter<NowPlayingSongs
                     }
                 });
 
-            holder.musicVisualizer.setColor(R.color.colorAccent);
+            holder.musicVisualizer.setColor(R.color.cmn_accent);
             if (MusicPlayer.isPlaying())
             holder.musicVisualizer.setVisibility(MusicPlayer.getCurrentAudioId() == queueSong.getSongId() ? View.VISIBLE : View.GONE);
             else

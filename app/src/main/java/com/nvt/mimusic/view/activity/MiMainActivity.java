@@ -2,7 +2,6 @@ package com.nvt.mimusic.view.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +9,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -34,11 +33,8 @@ import com.nvt.mimusic.utils.PermissionCallback;
 import com.nvt.mimusic.utils.PermissionRequest;
 
 import com.nvt.mimusic.view.fragment.home.AlbumFragment;
-import com.nvt.mimusic.view.fragment.home.SongFragment;
-import com.nvt.mimusic.view.fragment.now_playing.NowPlayingFragment;
+import com.nvt.mimusic.view.fragment.home.TopSongFragment;
 import com.nvt.mimusic.wiget.PlayPauseButton;
-
-import java.util.logging.Handler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,6 +75,10 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     TextView searchTab;
     @BindView(R.id.menuTab)
     TextView menuTab;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
+    @BindView(R.id.frameMainContent)
+    FrameLayout frameMainContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +96,7 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
             checkPermissionAndThenLoad();
         }else {
             gotoHomeFragment.run();
+
         }
         /**
          * Setup palnel
@@ -152,7 +153,8 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
         @Override
         public void run() {
             openScreenBackgroundTask(ScreenIDs.ID.HOME,AlbumFragment.class,R.id.frameAlbumContent,null,false);
-            openScreenBackgroundTask(ScreenIDs.ID.HOME,SongFragment.class,R.id.frameSongContent,null,false);
+            openScreenBackgroundTask(ScreenIDs.ID.HOME,TopSongFragment.class,R.id.frameSongContent,null,false);
+            setHightLightTab(ScreenIDs.ID.HOME);
 
         }
     };
@@ -197,13 +199,13 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
         if(MusicPlayer.isPlaying()) {
             if (!mPlayPauseButton.isPlayed()) {
                 mPlayPauseButton.setPlayed(true);
-                mPlayPauseButton.setColor(R.color.colorAccent);
+                mPlayPauseButton.setColor(R.color.cmn_accent);
                 mPlayPauseButton.startAnimation();
             }
 
             }else {
             mPlayPauseButton.setPlayed(false);
-            mPlayPauseButton.setColor(R.color.colorAccent);
+            mPlayPauseButton.setColor(R.color.cmn_accent);
             mPlayPauseButton.startAnimation();
         }
     }
@@ -277,6 +279,7 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     @OnClick(R.id.quickPlayingControl)
         public void openNowPlaying() {
         NavigationUtils.navigateToNowPlaying(this);
+        setHightLightTab(ScreenIDs.ID.NOW_PLAYING);
     }
     public  void isShowQuickControl(boolean isShow)
     {
@@ -292,6 +295,12 @@ public class MiMainActivity extends MiBaseActivity implements MediaStateListener
     public void openNowPlayingFromTab() {
         NavigationUtils.navigateToNowPlaying(this);
         setHightLightTab(ScreenIDs.ID.NOW_PLAYING);
+
+    }
+    @OnClick(R.id.searchTab)
+    public void openSearchTab() {
+        NavigationUtils.navigateToSearch(this);
+        setHightLightTab(ScreenIDs.ID.SEARCH_TAB);
 
     }
 

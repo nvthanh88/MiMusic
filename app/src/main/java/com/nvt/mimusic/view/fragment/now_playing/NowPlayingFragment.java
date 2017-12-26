@@ -123,7 +123,6 @@ public class NowPlayingFragment extends MiBaseFragment {
         songProgressCircular.setMax((int)MusicPlayer.duration());
         nowPlayingSongName.setText(MusicPlayer.getTrackName());
         nowPlayingArtistName.setText(MusicPlayer.getArtistName());
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(mAppContext));
         ImageLoader.getInstance().displayImage(MiApplication.getAlbumUri(MusicPlayer.getCurrentAlbumId()).toString(), nowPlayingAlbumCover,
                 new DisplayImageOptions.Builder().cacheInMemory(true)
                         .showImageOnFail(R.drawable.album1)
@@ -136,7 +135,7 @@ public class NowPlayingFragment extends MiBaseFragment {
 
                     @Override
                     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                        Bitmap failedBitmap = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.album1);
+
 
                     }
 

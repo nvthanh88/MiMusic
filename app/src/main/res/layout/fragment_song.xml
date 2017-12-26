@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     style="@style/Layout.FullWidthHeight"
-    android:background="@color/cmn_white"
-    android:paddingTop="@dimen/padding_normal"
-    android:paddingLeft="@dimen/padding_smaller"
-    android:paddingRight="@dimen/padding_smaller">
+    android:background="@color/cmn_white">
     <LinearLayout
-        android:id="@+id/llFragmentTitle"
+        android:id="@+id/llFragmentSongTitle"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,24 +12,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_large"
-            android:text="@string/txtRecycleTopSongText"
+            android:text="@string/txtRecycleSongText"
             android:layout_alignParentLeft="true"
             android:textColor="@color/cmn_black"
             android:textStyle="bold"/>
 
-
     </LinearLayout>
 
-
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/llFragmentTitle"
-        android:id="@+id/songRecycleView"
+        android:layout_below="@+id/llFragmentSongTitle"
+        android:id="@+id/allSongRecycleView"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/padding_small"
-        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
         android:fadeScrollbars="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:scrollbars="vertical" >
     </android.support.v7.widget.RecyclerView>
 

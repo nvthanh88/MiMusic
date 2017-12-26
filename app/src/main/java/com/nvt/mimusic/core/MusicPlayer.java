@@ -33,8 +33,9 @@ public class MusicPlayer {
         {
             try {
                 return mMiCoreService.position();
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            } catch (final RemoteException ignored) {
+            } catch (final IllegalStateException ex) {
+
             }
         }
         return  0;

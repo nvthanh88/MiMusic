@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtAlbumTile"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/cmn_accent"
                 android:textSize="@dimen/text_smaller"/>
 
 

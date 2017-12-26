@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 
 import com.nvt.mimusic.R;
-import com.nvt.mimusic.adapter.SongAdapter;
+import com.nvt.mimusic.adapter.TopSongAdapter;
 import com.nvt.mimusic.base.fragment.MiBaseFragment;
 import com.nvt.mimusic.loader.SongLoader;
 import com.nvt.mimusic.helper.GridSpacingItemDecoration;
@@ -23,10 +23,10 @@ import butterknife.BindView;
  * Created by Admin on 10/19/17.
  */
 
-public class SongFragment  extends MiBaseFragment{
+public class TopSongFragment extends MiBaseFragment{
     long albumID = -1;
     private List<Song> songList;
-    private SongAdapter mSongAdapter;
+    private TopSongAdapter mSongAdapter;
     @BindView(R.id.songRecycleView)
     RecyclerView songRecycleView;
     @Override
@@ -49,11 +49,12 @@ public class SongFragment  extends MiBaseFragment{
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mAppContext,1);
         songList = new ArrayList<>();
         TopTrackLoader topTrackLoader = new TopTrackLoader(mAppContext.getApplicationContext(),TopTrackLoader.QuerryType.TOP_TRACK);
-        mSongAdapter = new SongAdapter(SongLoader.getSongListForCursor(topTrackLoader.getCursor()),mAppContext);
+        mSongAdapter = new TopSongAdapter(SongLoader.getSongListForCursor(topTrackLoader.getCursor()),mAppContext);
         songRecycleView.setLayoutManager(layoutManager);
         songRecycleView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10 ), true));
         songRecycleView.setItemAnimator(new DefaultItemAnimator());
         songRecycleView.setAdapter(mSongAdapter);
+        songRecycleView.setNestedScrollingEnabled(false);
 
     }
     private int dpToPx(int dp) {

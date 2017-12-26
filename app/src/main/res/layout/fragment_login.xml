@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txtForgotPassText"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/cmn_accent"
             android:layout_gravity="end"
             android:textSize="@dimen/text_small"
             android:layout_marginTop="@dimen/padding_normal"
@@ -43,7 +43,7 @@
             android:textAllCaps="false"
             android:text="@string/btnLoginText"
             android:textColor="@color/cmn_white"
-            android:background="@color/colorAccent"
+            android:background="@color/cmn_accent"
             android:layout_marginTop="@dimen/padding_huge"
             />
 

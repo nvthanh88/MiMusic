@@ -1,5 +1,7 @@
 package com.nvt.mimusic.core;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.AudioManager;
 
 import android.media.audiofx.AudioEffect;
@@ -22,21 +25,26 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nvt.mimusic.R;
 import com.nvt.mimusic.constant.Constant;
 import com.nvt.mimusic.database.RecentStore;
 import com.nvt.mimusic.database.SongPlayedCounter;
 import com.nvt.mimusic.helper.MediaButtonIntentReceiver;
 import com.nvt.mimusic.helper.MusicPlaybackTrack;
 import com.nvt.mimusic.helper.Shuffler;
+import com.nvt.mimusic.utils.NavigationUtils;
 
 
 import java.lang.ref.WeakReference;
@@ -44,6 +52,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static com.nvt.mimusic.constant.Constant.META_CHANGED;
+import static com.nvt.mimusic.constant.Constant.NEXT_ACTION;
+import static com.nvt.mimusic.constant.Constant.PREVIOUS_ACTION;
+import static com.nvt.mimusic.constant.Constant.TOGGLEPAUSE_ACTION;
 
 
 /**
@@ -64,6 +75,9 @@ public class MusicService extends Service {
     private static final int REPEAT_NONE = 0;
     private static final int REPEAT_ONE = 1;
     private static final int REPEAT_ALL = 2;
+    private static final int NOTIFY_MODE_NONE = 0;
+    private static final int NOTIFY_MODE_FOREGROUND = 1;
+    private static final int NOTIFY_MODE_BACKGROUND = 2;
     private static boolean mServiceInUse = false;
     private final IBinder mBinder = new ServiceStub(this);
     private static LinkedList<Integer> mHistory = new LinkedList<>();
@@ -89,10 +103,13 @@ public class MusicService extends Service {
     private String mFileToPlay;
     private int repeatMode = REPEAT_NONE;
     private MusicPlayerHandler mPlayerHandler;
-
+    private NotificationManagerCompat mNotificationManager;
     private RecentStore mRecentStore;
     private SongPlayedCounter mSongPlayedCounter;
-
+    private long mNotificationPostTime = 0;
+    private int mNotifyMode = NOTIFY_MODE_NONE;
+    private long mLastPlayedTime;
+    private static final int IDLE_DELAY = 5 * 60 * 1000;
 
     private static final String[] PROJECTION = new String[]{
             "audio._id AS _id", MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
@@ -109,7 +126,7 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        mNotificationManager = NotificationManagerCompat.from(this);
         mHandlerThread = new HandlerThread("MusicPlayerHandler",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         mHandlerThread.start();
@@ -131,6 +148,7 @@ public class MusicService extends Service {
             //mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
         }
     };
+
 
 
     @Override
@@ -439,7 +457,7 @@ public class MusicService extends Service {
         //mFileToPlay = null;
         closeCursor();
         if (goToIdle) {
-            mIsSupposedToBePlaying = false;
+            setIsSupposedToBePlaying(false, false);
         } else {
             if (MiApplication.isLollipop())
                 stopForeground(false);
@@ -480,7 +498,46 @@ public class MusicService extends Service {
         } else {
             //saveQueue(false);
         }
+        if (whatChanged.equals(PLAYSTATE_CHANGED)) {
+            updateNotification();
+        }
 
+
+    }
+    private boolean recentlyPlayed() {
+        return isPlaying() || System.currentTimeMillis() - mLastPlayedTime < IDLE_DELAY;
+    }
+
+    private void updateNotification() {
+        final int newNotifyMode;
+        if (isPlaying()) {
+            newNotifyMode = NOTIFY_MODE_FOREGROUND;
+        } else if (recentlyPlayed()) {
+            newNotifyMode = NOTIFY_MODE_BACKGROUND;
+        } else {
+            newNotifyMode = NOTIFY_MODE_NONE;
+        }
+
+        int notificationId = hashCode();
+        if (mNotifyMode != newNotifyMode) {
+            if (mNotifyMode == NOTIFY_MODE_FOREGROUND) {
+                if (MiApplication.isLollipop())
+                    stopForeground(newNotifyMode == NOTIFY_MODE_NONE);
+                else
+                    stopForeground(newNotifyMode == NOTIFY_MODE_NONE || newNotifyMode == NOTIFY_MODE_BACKGROUND);
+            } else if (newNotifyMode == NOTIFY_MODE_NONE) {
+                mNotificationManager.cancel(notificationId);
+                mNotificationPostTime = 0;
+            }
+        }
+
+        if (newNotifyMode == NOTIFY_MODE_FOREGROUND) {
+            startForeground(notificationId, buildNotification());
+        } else if (newNotifyMode == NOTIFY_MODE_BACKGROUND) {
+            mNotificationManager.notify(notificationId, buildNotification());
+        }
+
+        mNotifyMode = newNotifyMode;
     }
 
     private void addToPlayList(final long[] list, int position, long sourceId, MiApplication.IdType sourceType) {
@@ -668,15 +725,18 @@ public class MusicService extends Service {
                 gotoNext(true);
             }
             mPlayer.start();
-            mIsSupposedToBePlaying = true;
+            setIsSupposedToBePlaying(true, true);
             /*mPlayerHandler.removeMessages(FADEDOWN);
             mPlayerHandler.sendEmptyMessage(FADEUP);
 
             setIsSupposedToBePlaying(true, true);
 
             cancelShutdown();
+
             updateNotification();*/
             notifyChange(META_CHANGED);
+            updateNotification();
+
         } else if (mPlaylist.size() <= 0) {
             //setShuffleMode(SHUFFLE_AUTO);
         }
@@ -905,7 +965,7 @@ public class MusicService extends Service {
             }
 
             if (pos < 0) {
-                mIsSupposedToBePlaying = true;
+                setIsSupposedToBePlaying(false, true);
                 return;
             }
 
@@ -953,6 +1013,7 @@ public class MusicService extends Service {
                             service.mCursor = null;
                         }
                         service.updateCursor(service.mPlaylist.get(service.mPlayPos).mId);
+                        service.updateNotification();
                         service.notifyChange(META_CHANGED);
                         break;
 
@@ -999,7 +1060,7 @@ public class MusicService extends Service {
 
                 mPlayer.pause();
                 notifyChange(META_CHANGED);
-                mIsSupposedToBePlaying = false;
+                setIsSupposedToBePlaying(false, true);
             }
         }
     }
@@ -1051,5 +1112,80 @@ public class MusicService extends Service {
         }
     }
 
+    /**
+     * Build Notification
+     * */
+
+    public Notification buildNotification(){
+        final String albumName = getAlbumName();
+        final String artistName = getArtistName();
+        final boolean isPlaying = isPlaying();
+        String text = TextUtils.isEmpty(albumName)
+                ? artistName : artistName + " - " + albumName;
+        int playButtonResId = isPlaying
+                ? R.drawable.ic_notify_pause : R.drawable.ic_notify_play;
+        Intent nowPlayingIntent = NavigationUtils.getNowPlayingIntent(this);
+        PendingIntent clickIntent = PendingIntent.getActivity(this, 0, nowPlayingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Bitmap artwork ;
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
+        artwork = ImageLoader.getInstance().loadImageSync(MiApplication.getAlbumUri(getAlbumId()).toString());
+        if (artwork == null) {
+            artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.album1);
+        }
+
+        if (mNotificationPostTime == 0) {
+            mNotificationPostTime = System.currentTimeMillis();
+        }
+        android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setLargeIcon(artwork)
+                .setContentIntent(clickIntent)
+                .setContentTitle(getTrackName())
+                .setContentText(text)
+                .setWhen(mNotificationPostTime)
+                .addAction(R.drawable.ic_notify_prev,
+                        "",
+                        retrievePlaybackAction(PREVIOUS_ACTION))
+                .addAction(playButtonResId, "",
+                        retrievePlaybackAction(TOGGLEPAUSE_ACTION))
+                .addAction(R.drawable.ic_notify_next,
+                        "",
+                        retrievePlaybackAction(NEXT_ACTION));
+        if (MiApplication.isLollipop()) {
+            builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle()
+                    .setMediaSession(mSession.getSessionToken())
+                    .setShowActionsInCompactView(0, 1, 2 ,3);
+            builder.setStyle(style);
+        }
+        if (MiApplication.isLollipop())
+        builder.setColor(getResources().getColor(R.color.cmn_accent));
+        Notification n = builder.build();
+       /* if (mActivateXTrackSelector) {
+            addXTrackSelector(n);
+        }*/
+        return n;
+    }
+    private final PendingIntent retrievePlaybackAction(final String action) {
+        final ComponentName serviceName = new ComponentName(this, MusicService.class);
+        Intent intent = new Intent(action);
+        intent.setComponent(serviceName);
+        return PendingIntent.getService(this, 0, intent, 0);
+    }
+    private void setIsSupposedToBePlaying(boolean value, boolean notify) {
+        if (mIsSupposedToBePlaying != value) {
+            mIsSupposedToBePlaying = value;
+
+
+            if (!mIsSupposedToBePlaying) {
+                //scheduleDelayedShutdown();
+                mLastPlayedTime = System.currentTimeMillis();
+            }
+
+            if (notify) {
+                notifyChange(PLAYSTATE_CHANGED);
+            }
+        }
+    }
 
 }
